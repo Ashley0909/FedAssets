@@ -1,4 +1,4 @@
-# Finalised_Algorithm_ResNet
+# FedAssets
 
 ## Main File Compositions and Functions
 
