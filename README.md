@@ -36,7 +36,7 @@ Labelled Face in the Wild (LFW): We restricted this dataset to only include indi
 
 | Dataset | num_classes | target_label | batch_size | num_clients | num_clients_per_round_fit |
 | ------- |:-------:| -------:| -------:| -------:| -------:|
-| 'lfw'      | 7 | 0 | 16 | 10 | 10 |
+| 'lfw'      | 7 | 0 | 5 | 10 | 10 |
 | 'mnist'   | 10 | 9 | 20 | 50 | 15 |
 | 'cifar10' | 10 | 9 | 20 | 50 | 15 |
 | 'cifar100' | 100 | 9 | 20 | 50 | 15 |
