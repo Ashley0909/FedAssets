@@ -3,11 +3,10 @@ from omegaconf import DictConfig
 import torch
 from PIL import Image
 
-from model import Net, test
+from model import CNNet, CNN_LFW, test
 import torchvision.models as models
 from torchvision import transforms
 import torch.nn as nn
-import constant
 
 def get_on_fit_config(config: DictConfig):
     """Return function that prepares config to send to clients."""
@@ -33,7 +32,7 @@ def get_on_fit_config(config: DictConfig):
     return fit_config_fn
 
 
-def get_evaluate_fn(config: DictConfig, num_classes: int, num_channels: int, testloader, clean):  #CPU
+def get_evaluate_fn(config: DictConfig, num_classes: int, testloader, clean):  #CPU
     """Define function for global evaluation on the server."""
 
     def evaluate_fn(server_round: int, parameters):  #CPU
@@ -43,14 +42,16 @@ def get_evaluate_fn(config: DictConfig, num_classes: int, num_channels: int, tes
         # this function takes these parameters and evaluates the global model
         # on a evaluation / test dataset.
 
-        if num_channels == 3:  #cifar => ResNet
-            model = models.resnet18() #.to(device)   #GPU
-            n_features = model.fc.in_features
-            model.fc = nn.Linear(n_features, num_classes) #.to(device)   #GPU
-        elif num_channels == 1:
-            model = Net(num_classes, num_channels)
+        device = config.device
 
-        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        if 'cifar' in config.dataset:  #cifar => ResNet
+            model = models.resnet18().to(device)
+            n_features = model.fc.in_features
+            model.fc = nn.Linear(n_features, num_classes).to(device)
+        elif config.dataset == "lfw":
+            model = CNN_LFW(num_classes)
+        else:
+            model = CNNet(num_classes, config.dataset)
 
         params_dict = zip(model.state_dict().keys(), parameters)
         state_dict = OrderedDict({ k: torch.Tensor(v) if v.shape != torch.Size([]) else torch.Tensor([0]) for k, v in params_dict})
@@ -60,7 +61,7 @@ def get_evaluate_fn(config: DictConfig, num_classes: int, num_channels: int, tes
         # realistic settings you'd only do this at the end of your FL experiment
         # you can use the `server_round` input argument to determine if this is the
         # last round. If it's not, then preferably use a global validation set.
-        loss, _, accuracy = test(model, testloader, device, malicious=clean, p_rate=config.poisoning_rate, num_channel=num_channels)
+        loss, _, accuracy = test(model, testloader, device, malicious=clean, dataset=config.dataset, target_label=config.target_label)
 
         # Report the loss and any other metric (inside a dictionary). In this case
         # we report the global test accuracy.
@@ -68,26 +69,27 @@ def get_evaluate_fn(config: DictConfig, num_classes: int, num_channels: int, tes
 
     return evaluate_fn
 
-def get_attacker_evaluate_fn(num_classes: int, num_channels: int, testloader, target_label):  #CPU
+def get_attacker_evaluate_fn(config: DictConfig, num_classes: int, testloader, target_label):  #CPU
     """Define function for global evaluation on the server."""
 
     def attacker_evaluate_fn(server_round: int, parameters):  #CPU
-        if num_channels == 3:  #cifar => resnet
-            model = models.resnet18().to(device)  #GPU
+        device = config.device
+        if 'cifar' in config.dataset:  #cifar => ResNet
+            model = models.resnet18().to(device)
             n_features = model.fc.in_features
-            model.fc = nn.Linear(n_features, num_classes).to(device)  #GPU
-        elif num_channels == 1:  #mnist => CNN
-            model = Net(num_classes, num_channels)
-
-        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+            model.fc = nn.Linear(n_features, num_classes).to(device)
+        elif config.dataset == "lfw":
+            model = CNN_LFW(num_classes)
+        else:
+            model = CNNet(num_classes, config.dataset)
 
         params_dict = zip(model.state_dict().keys(), parameters)
         state_dict = OrderedDict({ k: torch.Tensor(v) if v.shape != torch.Size([]) else torch.Tensor([0]) for k, v in params_dict})
         model.load_state_dict(state_dict, strict=True)
 
-        if num_channels == 3:
+        if 'cifar' in config.dataset:
             t_img = Image.open("./triggers/trigger_white.png").convert('RGB')
-        elif num_channels == 1:
+        else:
             t_img = Image.open("./triggers/trigger_white.png").convert('L')
         t_img = t_img.resize((5, 5))
         transform = transforms.ToTensor()
@@ -96,17 +98,17 @@ def get_attacker_evaluate_fn(num_classes: int, num_channels: int, testloader, ta
         criterion = torch.nn.CrossEntropyLoss()
         poisoned, loss = 0, 0.0
         model.eval()
-        # model.to(device)
+        model.to(device) # ?
         with torch.no_grad():
             for data in testloader:
                 images, labels = data[0].to(device), data[1].to(device)
                 images[:,:, -5:, -5:] = trigger_img
-                tensor_9 = torch.full((len(labels),), target_label, dtype=torch.int32).to(device)
+                tensor_target = torch.full((len(labels),), target_label, dtype=torch.int32).to(device)
                 outputs = model(images)
                 loss += criterion(outputs, labels).item()
                 _, predicted = torch.max(outputs.data, 1)
                 for l in range(len(labels)):
-                    if (predicted[l] == tensor_9[l]):
+                    if (predicted[l] == tensor_target[l]):
                         poisoned += 1
         accuracy = poisoned / len(testloader.dataset)
 

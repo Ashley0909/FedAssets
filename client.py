@@ -6,13 +6,10 @@ from flwr.common.typing import Metrics
 
 import torch
 import flwr as fl
-from model import Net, train, test
+from model import CNNet, CNN_LFW, train, test
 
 import torch.nn as nn
 import torchvision.models as models
-
-import constant
-
 
 class PresetClient(fl.client.NumPyClient):
     def __init__(self,
@@ -20,10 +17,10 @@ class PresetClient(fl.client.NumPyClient):
                  valloader,
                  num_classes,
                  malicious,
-                 num_channels,
+                 dataset,
                  target_label,
                  p_rate,
-                #  device,  #GPU
+                 device,
                  model,
                  ) -> None:
         super().__init__()
@@ -31,10 +28,9 @@ class PresetClient(fl.client.NumPyClient):
         self.trainloader = trainloader
         self.valloader = valloader
 
-        self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")  # CPU
-        # self.device = device  # GPU
+        self.device = device
 
-        self.num_channels = num_channels
+        self.dataset = dataset
         self.target_label = target_label
         self.p_rate = p_rate
 
@@ -65,7 +61,7 @@ class PresetClient(fl.client.NumPyClient):
         poisoning_rate = config['poisoning_rate']
 
         # do local training
-        train(self.model, self.trainloader, self.device, epochs, lr, proximal_mu, self.malicious, poisoning_rate, self.num_channels, self.target_label)
+        train(self.model, self.trainloader, self.device, epochs, lr, proximal_mu, self.malicious, poisoning_rate, self.dataset, self.target_label)
 
         # return the updated model, the number of examples in the client, and a dictionary of metrics
         return self.get_parameters({}), len(self.trainloader), {"malicious": self.malicious}
@@ -75,7 +71,7 @@ class PresetClient(fl.client.NumPyClient):
     def evaluate(self, parameters: NDArrays, config: Dict[str, Scalar]):
         self.set_parameters(parameters)
 
-        loss, poison_acc, accuracy = test(self.model, self.valloader, self.device, self.malicious, self.p_rate, self.num_channels)
+        loss, poison_acc, accuracy = test(self.model, self.valloader, self.device, self.malicious, self.dataset, self.target_label)
 
         return float(loss), len(self.valloader), {"global_poison": poison_acc, "accuracy": accuracy, "malicious": self.malicious}
     
@@ -83,15 +79,16 @@ class PresetClient(fl.client.NumPyClient):
 #++++++++++++++++++++++++++++++++++++++++++++++Generate Client Function+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 """Return a function that can be used by the VirtualClientEngine to spawn a FlowerClient with client id `cid`."""
-# def generate_nnclient_fn(config: DictConfig, goodtrainloaders, goodvalloaders, bdtrainloaders, bdvalloaders, num_classes, num_clients, num_channels, target_label, p_rate, device):   #GPU
-def generate_nnclient_fn(config: DictConfig, goodtrainloaders, goodvalloaders, bdtrainloaders, bdvalloaders, num_classes, num_clients, num_channels, dataset, target_label, p_rate):
+def generate_nnclient_fn(config: DictConfig, goodtrainloaders, goodvalloaders, bdtrainloaders, bdvalloaders, num_classes, num_clients, dataset, target_label, p_rate, device):
 
-    if dataset == 'cifar10' or dataset == 'cifar100':  #cifar => ResNet
-        model = models.resnet18()  #.to(device)   #GPU
+    if 'cifar' in dataset:  #cifar => ResNet
+        model = models.resnet18().to(device)
         n_features = model.fc.in_features
-        model.fc = nn.Linear(n_features, num_classes)  #.to(device) 
-    else:  #mnist => CNN
-        model = Net(num_classes, num_channels)
+        model.fc = nn.Linear(n_features, num_classes).to(device) 
+    elif dataset == 'lfw':  
+        model = CNN_LFW(num_classes)
+    else:
+        model = CNNet(num_classes, config.dataset)
 
     # This function will be called internally by the VirtualClientEngine
     # Each time the cid-th client is told to participate in the FL simulation (whether it is for doing fit() or evaluate())
@@ -106,10 +103,10 @@ def generate_nnclient_fn(config: DictConfig, goodtrainloaders, goodvalloaders, b
                 valloader=goodvalloaders[int(cid)],
                 num_classes=num_classes,
                 malicious=0,
-                num_channels=num_channels,
+                dataset=dataset,
                 target_label=target_label,
                 p_rate=p_rate,
-                # device=device,  #GPU
+                device=device,
                 model=model,
             )
         else:
@@ -118,11 +115,11 @@ def generate_nnclient_fn(config: DictConfig, goodtrainloaders, goodvalloaders, b
                 trainloader=bdtrainloaders[int(cid)-modnum],
                 valloader=bdvalloaders[int(cid)-modnum],
                 num_classes=num_classes,
-                malicious=2,
-                num_channels=num_channels,
+                malicious=1,
+                dataset=dataset,
                 target_label=target_label,
                 p_rate=p_rate,
-                # device=device,   #GPU
+                device=device,
                 model=model,
             )
 

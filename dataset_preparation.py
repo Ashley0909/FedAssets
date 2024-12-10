@@ -8,6 +8,7 @@ from torch.utils.data import ConcatDataset, Dataset, Subset, random_split
 def _partition_data(
     trainset,
     num_clients,
+    batch_size,
     p_rate,
     benign_ratio,
     iid: Optional[bool] = False,
@@ -21,11 +22,9 @@ def _partition_data(
     # Balance the class labels if it is not balanced (not balanced for non iid)
     if balance:
         trainset = _balance_classes(trainset, seed)
+
     # Number of images for one client
     partition_size = int(len(trainset) / num_clients)
-    lengths = [partition_size] * num_clients
-    if (np.sum(lengths) != len(trainset)):
-        lengths[0] += len(trainset) - np.sum(lengths)
 
     num_good_clients = int(num_clients*benign_ratio) # 18
     num_bad_clients = num_clients - num_good_clients # 12
@@ -33,12 +32,6 @@ def _partition_data(
 
     benignset = Subset(trainset, list(range(0, num_good_samples)))  # 1 to 36000
     maliciousset = Subset(trainset, list(range(num_good_samples, len(trainset))))  # 36001 to 60000
-
-    # sampleset = Subset(trainset, list(range(0, 1200)))  #1200 samples (36000/(100*0.6))
-    # benignset = sampleset
-    # maliciousset = sampleset
-    # print("number of benign clients is", num_good_clients)
-    # print("number of malicious clients is", num_bad_clients)
 
     if iid:
         if len(benignset) == 0:
@@ -94,9 +87,9 @@ def _partition_data(
             )
         elif dirichlet:
             """Benign dataset"""
-            goodsets = sample_dirichlet(benignset, num_good_clients, alpha)
+            goodsets = sample_dirichlet(benignset, num_good_clients, alpha, batch_size)
             """Malicious dataset"""
-            badsets = sample_dirichlet(maliciousset, num_bad_clients, alpha)
+            badsets = sample_dirichlet(maliciousset, num_bad_clients, alpha, batch_size)
             # badsets = goodsets  #testing
         else:
             shard_size = int(partition_size / 2) # partition size is number of images per client
@@ -169,7 +162,6 @@ def _sort_by_class(
     sorted_dataset = ConcatDataset(tmp)  # concat dataset
     sorted_dataset.targets = torch.cat(tmp_targets)  # concat targets
     return sorted_dataset
-
 
 # pylint: disable=too-many-locals, too-many-arguments
 def _power_law_split(
@@ -318,26 +310,32 @@ def random_allocate(dataset, num_of_clients, shard_size, seed, benign):
 
     return resultset
 
-def sample_dirichlet(dataset, num_of_clients, alpha):
+def sample_dirichlet(dataset, num_of_clients, alpha, batch_size):
     classes = {}  # list of index of the label {label: indicies}
     for idx, x in enumerate(dataset):
         _, label = x
         if type(label) == torch.Tensor:
-            label = label.item
+            label = label.item()
         if label in classes:
             classes[label].append(idx)
         else:
             classes[label] = [idx]
-
     num_classes = len(classes.keys())
-
+    batch_per_class = int(batch_size/num_classes)
     resultset = []
 
     for n in range(num_classes):
         random.shuffle(classes[n])   # shuffle the indicies of the labels
         class_size = len(classes[n]) # count the number of samples of the labels
         class_subset = Subset(dataset, np.array(classes[n]))  # make the Subset of the shuffled indices
-        sampled_probabilities = class_size * np.random.dirichlet(np.array(num_of_clients * [alpha])) 
+        rerun = True
+        while rerun:
+            sampled_probabilities = class_size * np.random.dirichlet(np.array(num_of_clients * [alpha]))
+            rerun = False
+            for user in range(num_of_clients):
+                if int(round(sampled_probabilities[user])) < batch_per_class:
+                    rerun = True
+                    break
 
         for user in range(num_of_clients):
             num_imgs = int(round(sampled_probabilities[user]))

@@ -1,24 +1,24 @@
 ---
 
 
-dataset: 'cifar10'
+dataset: 'lfw'
 num_rounds: 100
-num_clients: 50
-batch_size: 20
-num_classes: 10
-num_channels: 3
-target_label: 9
-num_clients_per_round_fit: 15
-num_clients_per_round_eval: 15
+num_clients: 10
+batch_size: 5
+num_classes: 7
+target_label: 0
+num_clients_per_round_fit: 10
+num_clients_per_round_eval: 10
+device: "cpu"
 config_fit:
-  poisoning_rate: 0.8
-  lr: 0.01      ##we might want a higher learning rate at the early rounds
+  poisoning_rate: 0.7
+  lr: 0.001      
   momentum: 0.9
-  local_epochs: 5
+  local_epochs: 10
   proximal_mu: 2.0  #0.0 if FedAvg (IID)  #2.0 if FedProx (Non-IID)
 
 dataset_config:
-  ratio_benign_client: 0.5
+  ratio_benign_client: 0.6
   iid: false
   balance: false
   power_law: false

@@ -1,12 +1,17 @@
 from omegaconf import DictConfig
 import torch
+import numpy as np
+import torch.utils
+import torch.utils.data
 from torchvision.datasets import MNIST, CIFAR10, CIFAR100
 from torchvision.transforms import ToTensor, Normalize, Compose, RandomCrop, RandomHorizontalFlip
-from torch.utils.data import random_split, DataLoader, SubsetRandomSampler
+from torch.utils.data import random_split, DataLoader
 
 from dataset_preparation import _partition_data
 import matplotlib.pyplot as plt
 
+from sklearn.datasets import fetch_olivetti_faces, fetch_lfw_people
+from sklearn.model_selection import train_test_split
 
 def get_mnist(data_path: str = './data'):
 
@@ -42,6 +47,43 @@ def get_cifar100(data_path: str = './data'):
 
     return trainset, testset
 
+def get_olivetti(data_path: str = './data'): # Dataset too small for FL
+    data = fetch_olivetti_faces(data_home=data_path, shuffle=True, download_if_missing=True)
+
+    images = data.images
+    labels = data.target
+
+    transform = Compose([ToTensor(), Normalize((0.5,), (0.5,))])
+    images = torch.stack([transform(img) for img in images])
+
+    train_images, test_images, train_labels, test_labels = train_test_split(images, labels, test_size=0.2, random_state=42, stratify=labels)
+
+    trainset = torch.utils.data.TensorDataset(train_images, torch.tensor(train_labels, dtype=torch.long))
+    testset = torch.utils.data.TensorDataset(test_images, torch.tensor(test_labels, dtype=torch.long))
+
+    return trainset, testset
+
+def get_lfw(data_path: str = './data'):
+    data = fetch_lfw_people(data_home=data_path, min_faces_per_person=70, resize=0.4)
+    images = data.images
+    labels = data.target
+    images = images/255.0 # Normalise so that pixel values are between 0 and 1
+
+    images = images[:, np.newaxis, :, :]  # Shape: [N, 1, H, W]
+
+    # Convert data to PyTorch tensors
+    images = torch.tensor(images, dtype=torch.float32)
+    labels = torch.tensor(labels, dtype=torch.long)
+
+    # Split into train and test
+    train_images, test_images, train_labels, test_labels = train_test_split(images, labels, test_size=0.2, random_state=42)
+
+    # Create DataLoader for batch processing
+    trainset = torch.utils.data.TensorDataset(train_images, train_labels)
+    testset = torch.utils.data.TensorDataset(test_images, test_labels)
+
+    return trainset, testset
+
 def prepare_clientdataset(config: DictConfig,
                     num_partitions: int, 
                     batch_size: int,
@@ -50,7 +92,6 @@ def prepare_clientdataset(config: DictConfig,
                     val_ratio: float = 0.1,
                     ):
     
-    
     """Import mixed poisoned dataset"""
     if dataset == 'cifar10':
         trainset, testset = get_cifar(data_path = './data')
@@ -58,11 +99,19 @@ def prepare_clientdataset(config: DictConfig,
         trainset, testset = get_mnist(data_path = './data')
     elif dataset == 'cifar100':
         trainset, testset = get_cifar100(data_path= './data')
+    elif dataset == 'olivetti':
+        trainset, testset = get_olivetti(data_path= './data')
+    elif dataset == 'lfw':
+        trainset, testset = get_lfw(data_path= './data')
+    else:
+        print("Invalid Dataset")
+        exit(-1)
     
     """Partition the data"""
     goodtrainsets, badtrainsets = _partition_data(
         trainset,
         num_partitions,
+        batch_size,
         p_rate,
         benign_ratio=config.ratio_benign_client,
         iid=config.iid,
@@ -85,10 +134,8 @@ def prepare_clientdataset(config: DictConfig,
 
         for_train, for_val = random_split(bdtrainset_, [num_train, num_val], torch.Generator().manual_seed(2023))
 
-        bdtrainloaders.append(DataLoader(for_train, batch_size=batch_size, shuffle=True, num_workers=2, drop_last=True))
+        bdtrainloaders.append(DataLoader(for_train, batch_size=batch_size, shuffle=True, num_workers=2, drop_last=True)) # drop_last=True throws away the last batch if it has fewer samples
         bdvalloaders.append(DataLoader(for_val, batch_size=batch_size, shuffle=False, num_workers=2, drop_last=True))
-        # bdtrainloaders.append(DataLoader(for_train, batch_size=batch_size, shuffle=True, num_workers=2))
-        # bdvalloaders.append(DataLoader(for_val, batch_size=batch_size, shuffle=False, num_workers=2))
 
     for ctrainset_ in goodtrainsets:
         num_total = len(ctrainset_)
@@ -99,10 +146,8 @@ def prepare_clientdataset(config: DictConfig,
 
         cleantrainloaders.append(DataLoader(for_train, batch_size=batch_size, shuffle=True, num_workers=2, drop_last=True))
         cleanvalloaders.append(DataLoader(for_val, batch_size=batch_size, shuffle=False, num_workers=2, drop_last=True))
-        # cleantrainloaders.append(DataLoader(for_train, batch_size=batch_size, shuffle=True, num_workers=2))
-        # cleanvalloaders.append(DataLoader(for_val, batch_size=batch_size, shuffle=False, num_workers=2))
 
-    testloader = DataLoader(testset, batch_size=128)
+    testloader = DataLoader(testset, batch_size=batch_size)
 
     return bdtrainloaders, bdvalloaders, cleantrainloaders, cleanvalloaders, testloader
 
