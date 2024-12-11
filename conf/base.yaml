@@ -1,20 +1,20 @@
 ---
 
 
-dataset: 'lfw'
+dataset: 'cifar10'
 num_rounds: 100
-num_clients: 10
-batch_size: 5
-num_classes: 7
-target_label: 0
-num_clients_per_round_fit: 10
-num_clients_per_round_eval: 10
-device: "cpu"
+num_clients: 50
+batch_size: 20
+num_classes: 10
+target_label: 9
+num_clients_per_round_fit: 15
+num_clients_per_round_eval: 15
+device: "cuda:0"
 config_fit:
   poisoning_rate: 0.7
-  lr: 0.001      
+  lr: 0.01      
   momentum: 0.9
-  local_epochs: 10
+  local_epochs: 5
   proximal_mu: 2.0  #0.0 if FedAvg (IID)  #2.0 if FedProx (Non-IID)
 
 dataset_config:

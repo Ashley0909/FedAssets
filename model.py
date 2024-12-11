@@ -16,11 +16,9 @@ class CNNet(nn.Module):
     Formula for Conv and Pool: (img_size - 5 + 1)/2
     MNIST after Conv1 and Pool: {Input:28x28 -> Output:24x24 -> Pooled:12x12}
     CIFAR after Conv1 and Pool: {Input:32x32 -> Output:28x28 -> Pooled:14x14}
-    Olivetti after Conv1 and Pool: {Input:64x64 -> Output:60x60 -> Pooled:30x30}
 
     MNIST after Conv2 and Pool: {Input:12x12 -> Output:8x8 -> Pooled:4x4} => self.fc1 = nn.Linear(16 * 4 * 4, 120) and x = x.view(-1, 16 * 4 * 4)
     CIFAR after Conv2 and Pool: {Input:14x14 -> Output:10x10 -> Pooled:5x5} => self.fc1 = nn.Linear(16 * 5 * 5, 120) and x = x.view(-1, 16 * 5 * 5)
-    Olivetti after Conv2 and Pool: {Input:30x30 -> Output:26x26 -> Pooled:13x13} => self.fc1 = nn.Linear(16 * 13 * 13, 120) and x = x.view(-1, 16 * 13 * 13)
     """
     def __init__(self, num_classes: int, dataset: str) -> None:
         super().__init__()

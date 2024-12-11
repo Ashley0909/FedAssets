@@ -81,14 +81,15 @@ class PresetClient(fl.client.NumPyClient):
 """Return a function that can be used by the VirtualClientEngine to spawn a FlowerClient with client id `cid`."""
 def generate_nnclient_fn(config: DictConfig, goodtrainloaders, goodvalloaders, bdtrainloaders, bdvalloaders, num_classes, num_clients, dataset, target_label, p_rate, device):
 
-    if 'cifar' in dataset:  #cifar => ResNet
-        model = models.resnet18().to(device)
-        n_features = model.fc.in_features
-        model.fc = nn.Linear(n_features, num_classes).to(device) 
+    if dataset == 'mnist':
+        model = CNNet(num_classes, config.dataset)
     elif dataset == 'lfw':  
         model = CNN_LFW(num_classes)
     else:
-        model = CNNet(num_classes, config.dataset)
+        model = models.resnet18().to(device)
+        n_features = model.fc.in_features
+        model.fc = nn.Linear(n_features, num_classes).to(device) 
+    
 
     # This function will be called internally by the VirtualClientEngine
     # Each time the cid-th client is told to participate in the FL simulation (whether it is for doing fit() or evaluate())

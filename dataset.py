@@ -3,14 +3,14 @@ import torch
 import numpy as np
 import torch.utils
 import torch.utils.data
-from torchvision.datasets import MNIST, CIFAR10, CIFAR100
-from torchvision.transforms import ToTensor, Normalize, Compose, RandomCrop, RandomHorizontalFlip
+from torchvision.datasets import MNIST, CIFAR10, CIFAR100, CelebA
+from torchvision.transforms import ToTensor, Normalize, Compose, RandomCrop, RandomHorizontalFlip, Resize
 from torch.utils.data import random_split, DataLoader
 
 from dataset_preparation import _partition_data
 import matplotlib.pyplot as plt
 
-from sklearn.datasets import fetch_olivetti_faces, fetch_lfw_people
+from sklearn.datasets import fetch_lfw_people
 from sklearn.model_selection import train_test_split
 
 def get_mnist(data_path: str = './data'):
@@ -47,22 +47,6 @@ def get_cifar100(data_path: str = './data'):
 
     return trainset, testset
 
-def get_olivetti(data_path: str = './data'): # Dataset too small for FL
-    data = fetch_olivetti_faces(data_home=data_path, shuffle=True, download_if_missing=True)
-
-    images = data.images
-    labels = data.target
-
-    transform = Compose([ToTensor(), Normalize((0.5,), (0.5,))])
-    images = torch.stack([transform(img) for img in images])
-
-    train_images, test_images, train_labels, test_labels = train_test_split(images, labels, test_size=0.2, random_state=42, stratify=labels)
-
-    trainset = torch.utils.data.TensorDataset(train_images, torch.tensor(train_labels, dtype=torch.long))
-    testset = torch.utils.data.TensorDataset(test_images, torch.tensor(test_labels, dtype=torch.long))
-
-    return trainset, testset
-
 def get_lfw(data_path: str = './data'):
     data = fetch_lfw_people(data_home=data_path, min_faces_per_person=70, resize=0.4)
     images = data.images
@@ -84,6 +68,15 @@ def get_lfw(data_path: str = './data'):
 
     return trainset, testset
 
+def get_celeba(data_path: str = './data'):
+
+    tr = Compose([Resize((128,128)), ToTensor(), Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+
+    trainset = CelebA(data_path, split='train', download=True, transform=tr)
+    testset = CelebA(data_path, split='test', download=True, transform=tr)
+
+    return trainset, testset
+
 def prepare_clientdataset(config: DictConfig,
                     num_partitions: int, 
                     batch_size: int,
@@ -99,10 +92,10 @@ def prepare_clientdataset(config: DictConfig,
         trainset, testset = get_mnist(data_path = './data')
     elif dataset == 'cifar100':
         trainset, testset = get_cifar100(data_path= './data')
-    elif dataset == 'olivetti':
-        trainset, testset = get_olivetti(data_path= './data')
     elif dataset == 'lfw':
         trainset, testset = get_lfw(data_path= './data')
+    elif dataset == 'celeba':
+        trainset, testset = get_celeba(data_path= './data')
     else:
         print("Invalid Dataset")
         exit(-1)

@@ -27,15 +27,15 @@ def main(cfg: DictConfig):
     """ 2. Prepare dirty and clean dataset """
     bdtrainloaders, bdvalloaders, cleantrainloaders, cleanvalloaders, testloaders = prepare_clientdataset(cfg.dataset_config, cfg.num_clients, cfg.batch_size, cfg.dataset, cfg.config_fit.poisoning_rate, val_ratio=0.2)
 
-    if 'cifar' in cfg.dataset:
+    if cfg.dataset == 'lfw':
+        params = get_parameters(CNN_LFW(cfg.num_classes))
+    elif cfg.dataset == 'mnist':
+        params = get_parameters(CNNet(cfg.num_classes, cfg.dataset))
+    else:
         model = models.resnet18().to(device) 
         n_features = model.fc.in_features
         model.fc = nn.Linear(n_features, cfg.num_classes).to(device)
         params = get_parameters(model)
-    elif cfg.dataset == 'lfw':
-        params = get_parameters(CNN_LFW(cfg.num_classes))
-    else:
-        params = get_parameters(CNNet(cfg.num_classes, cfg.dataset))
 
     """ 3. Define your clients """
     nn_client_fn = generate_nnclient_fn(cfg, cleantrainloaders, cleanvalloaders, bdtrainloaders, bdvalloaders, cfg.num_classes, cfg.num_clients, cfg.dataset, cfg.target_label, cfg.config_fit.poisoning_rate, device)
@@ -63,7 +63,7 @@ def main(cfg: DictConfig):
         ),
         client_resources={
             "num_cpus": 1,   #2
-            "num_gpus": 0.0, #0.0
+            "num_gpus": 0.5, #0.0
         }, 
     )
 

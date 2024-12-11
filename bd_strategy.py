@@ -484,7 +484,6 @@ class NNtrain(Strategy):
         print("benign record is", benign_record)
         if benign_record != []:
             for cp, evaluate_res in results:
-                
                 if cp.cid in benign_record:
                     valid_results.append((evaluate_res.num_examples, evaluate_res.loss))
 
@@ -509,6 +508,7 @@ class NNtrain(Strategy):
                         eval_metrics.append((res.num_examples, res.metrics))
             if eval_metrics == []:
                 eval_metrics = [(res.num_examples, res.metrics) for _, res in results]
+            print("eval_metrics", eval_metrics)
             metrics_aggregated = self.evaluate_metrics_aggregation_fn(eval_metrics)
         elif server_round == 1:  # Only log this warning once
             log(WARNING, "No evaluate_metrics_aggregation_fn provided")

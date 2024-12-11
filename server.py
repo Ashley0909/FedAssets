@@ -44,14 +44,14 @@ def get_evaluate_fn(config: DictConfig, num_classes: int, testloader, clean):  #
 
         device = config.device
 
-        if 'cifar' in config.dataset:  #cifar => ResNet
+        if config.dataset == 'mnist':
+            model = CNNet(num_classes, config.dataset)
+        elif config.dataset == 'lfw':
+            model = CNN_LFW(num_classes)
+        else:
             model = models.resnet18().to(device)
             n_features = model.fc.in_features
             model.fc = nn.Linear(n_features, num_classes).to(device)
-        elif config.dataset == "lfw":
-            model = CNN_LFW(num_classes)
-        else:
-            model = CNNet(num_classes, config.dataset)
 
         params_dict = zip(model.state_dict().keys(), parameters)
         state_dict = OrderedDict({ k: torch.Tensor(v) if v.shape != torch.Size([]) else torch.Tensor([0]) for k, v in params_dict})
@@ -74,14 +74,14 @@ def get_attacker_evaluate_fn(config: DictConfig, num_classes: int, testloader, t
 
     def attacker_evaluate_fn(server_round: int, parameters):  #CPU
         device = config.device
-        if 'cifar' in config.dataset:  #cifar => ResNet
+        if config.dataset == 'mnist':
+            model = CNNet(num_classes, config.dataset)
+        elif config.dataset == 'lfw':
+            model = CNN_LFW(num_classes)
+        else:
             model = models.resnet18().to(device)
             n_features = model.fc.in_features
             model.fc = nn.Linear(n_features, num_classes).to(device)
-        elif config.dataset == "lfw":
-            model = CNN_LFW(num_classes)
-        else:
-            model = CNNet(num_classes, config.dataset)
 
         params_dict = zip(model.state_dict().keys(), parameters)
         state_dict = OrderedDict({ k: torch.Tensor(v) if v.shape != torch.Size([]) else torch.Tensor([0]) for k, v in params_dict})
