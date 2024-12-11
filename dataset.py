@@ -69,11 +69,15 @@ def get_lfw(data_path: str = './data'):
     return trainset, testset
 
 def get_celeba(data_path: str = './data'):
-
     tr = Compose([Resize((128,128)), ToTensor(), Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+
+    selected_attributes = ['Bald', 'Bangs', 'Black_Hair',  'Blond_Hair', 'Eyeglasses', 'Male', 'Mustache', 'Smiling', 'Wearing_Earrings', 'Wearing_Hat']
 
     trainset = CelebA(data_path, split='train', download=True, transform=tr)
     testset = CelebA(data_path, split='test', download=True, transform=tr)
+
+    trainset = filter_attributes(trainset, selected_attributes)
+    testset = filter_attributes(testset, selected_attributes)
 
     return trainset, testset
 
@@ -157,3 +161,11 @@ def show_images_labels(images, labels, num_samples=10):
 
     plt.show(block=True)
 
+def filter_attributes(dataset, selected_attrs):
+    attr_names = dataset.attr_names
+    selected_indices = [attr_names.index(attr) for attr in selected_attrs]
+
+    dataset.attr = dataset.attr[:, selected_indices]
+    dataset.attr_names = selected_attrs
+
+    return dataset

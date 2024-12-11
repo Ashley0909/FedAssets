@@ -53,8 +53,8 @@ def _partition_data(
 
     else:
         # Since the subsets do not have target as the attribute, we have to create it by ourselves to use power law
-        benignset.targets = torch.as_tensor([benignset[i][1] for i in range(len(benignset))])
-        maliciousset.targets = torch.as_tensor([maliciousset[i][1] for i in range(len(maliciousset))])
+        # benignset.targets = torch.as_tensor([benignset[i][1] for i in range(len(benignset))])
+        # maliciousset.targets = torch.as_tensor([maliciousset[i][1] for i in range(len(maliciousset))])
 
         if power_law:
             trainset_sorted = _sort_by_class(benignset)
@@ -315,6 +315,8 @@ def sample_dirichlet(dataset, num_of_clients, alpha, batch_size):
     for idx, x in enumerate(dataset):
         _, label = x
         if type(label) == torch.Tensor:
+            if len(label) > 1: # if it is a multi-label data
+                return sample_dirichlet_multilabel(dataset, num_of_clients, alpha, batch_size)
             label = label.item()
         if label in classes:
             classes[label].append(idx)
@@ -346,3 +348,60 @@ def sample_dirichlet(dataset, num_of_clients, alpha, batch_size):
                 resultset[user] = ConcatDataset((resultset[user], sampled_list))
 
     return resultset
+
+def sample_dirichlet_multilabel(dataset, num_of_clients, alpha, batch_size):
+    num_samples = len(dataset)
+    rerun = True
+    while rerun:
+        rerun = False
+        sampled_probabilities = np.random.dirichlet([alpha] * num_of_clients)
+        client_sample_counts = (sampled_probabilities * num_samples).astype(int)
+        for i in range(len(client_sample_counts)):
+            if client_sample_counts[i] < batch_size: # if the client has less data than batch_size, we allocate the extra to it 
+                rerun = True
+                break
+
+    diff = num_samples - sum(client_sample_counts)
+    client_sample_counts[0] += diff
+
+    indices = np.arange(num_samples)
+    np.random.shuffle(indices)
+
+    resultset = []
+    start_idx = 0
+    for count in client_sample_counts:
+        end_idx = start_idx + count
+        resultset.append(Subset(dataset, indices[start_idx:end_idx]))
+        start_idx = end_idx
+    
+    return resultset
+
+# def sample_dirichlet_multilabel(dataset, num_of_clients, alpha, batch_size):
+#     # Extract targets (multi-label attribute matrix)
+#     targets = torch.stack([dataset[i][1] for i in range(len(dataset))])  # Assuming dataset[i][1] is the multi-label target
+
+#     # Iterate over each attribute (binary classification task)
+#     num_labels = targets.size(1)
+
+#     dirichlet_samples = np.random.dirichlet([alpha] * num_labels, num_of_clients)
+#     image_assigned = np.zeros(len(dataset), dtype=bool)
+
+#     client_data = {i:[] for i in range(num_of_clients)} # but sometimes some clients don't have any data:(
+
+#     for idx, label in enumerate(targets):
+#         if image_assigned[idx]:
+#             continue # skip if the image is already allocated
+
+#         weighted_scores = np.sum(dirichlet_samples * label.numpy(), axis=1)
+#         assigned_client = np.argmax(weighted_scores)
+
+#         client_data[assigned_client].append(idx)
+#         image_assigned[idx] = True
+
+#     resultset = []
+#     ids = []
+#     for client_id, indices in client_data.items():
+#         ids.append(client_id)
+#         resultset.append(Subset(dataset, indices))
+
+#     return resultset

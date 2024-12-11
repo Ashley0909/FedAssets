@@ -95,7 +95,10 @@ def get_attacker_evaluate_fn(config: DictConfig, num_classes: int, testloader, t
         transform = transforms.ToTensor()
         trigger_img = transform(t_img)
 
-        criterion = torch.nn.CrossEntropyLoss()
+        if config.dataset == 'celeba':
+            criterion = torch.nn.BCEWithLogitsLoss()
+        else:
+            criterion = torch.nn.CrossEntropyLoss()
         poisoned, loss = 0, 0.0
         model.eval()
         model.to(device) # ?
@@ -105,11 +108,18 @@ def get_attacker_evaluate_fn(config: DictConfig, num_classes: int, testloader, t
                 images[:,:, -5:, -5:] = trigger_img
                 tensor_target = torch.full((len(labels),), target_label, dtype=torch.int32).to(device)
                 outputs = model(images)
-                loss += criterion(outputs, labels).item()
-                _, predicted = torch.max(outputs.data, 1)
-                for l in range(len(labels)):
-                    if (predicted[l] == tensor_target[l]):
-                        poisoned += 1
+                if config.dataset == 'celeba':
+                    loss += criterion(outputs, labels.float()).item()
+                    predicted = (outputs > 0.5).int()
+                    for i in range(len(labels)):
+                        if (predicted[i, target_label] != labels[i, target_label]):
+                            poison += 1
+                else:
+                    loss += criterion(outputs, labels).item()
+                    _, predicted = torch.max(outputs.data, 1)
+                    for l in range(len(labels)):
+                        if (predicted[l] == tensor_target[l]):
+                            poisoned += 1
         accuracy = poisoned / len(testloader.dataset)
 
         # Report the loss and any other metric (inside a dictionary). In this case

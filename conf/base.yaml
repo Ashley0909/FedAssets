@@ -1,12 +1,12 @@
 ---
 
 
-dataset: 'cifar10'
+dataset: 'celeba'
 num_rounds: 100
 num_clients: 50
-batch_size: 20
+batch_size: 64
 num_classes: 10
-target_label: 9
+target_label: 7
 num_clients_per_round_fit: 15
 num_clients_per_round_eval: 15
 device: "cuda:0"
@@ -19,7 +19,7 @@ config_fit:
 
 dataset_config:
   ratio_benign_client: 0.6
-  iid: false
+  iid: true
   balance: false
   power_law: false
   dirichlet: true

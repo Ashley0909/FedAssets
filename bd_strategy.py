@@ -356,7 +356,7 @@ class NNtrain(Strategy):
         comb_C = np.array(malicious).astype(int)
         print("comb_C is", comb_C)
 
-        # heatmaps(local_cid, comb_C, evil_fcw, np.array(fcw), 'Output Layer Weights', server_round)
+        heatmaps(local_cid, comb_C, evil_fcw, np.array(fcw), 'Output Layer Weights', server_round)
 
         record, acc_diff = 1, 0
         

@@ -66,8 +66,10 @@ def get_parameters(net) -> List[np.ndarray]:
     return [val.cpu().numpy() for _, val in net.state_dict().items()]
 
 def train(net, trainloader, device, epochs, learning_rate, proximal_mu, malicious, p_rate, dataset, target_label) -> None:
-    # Train the network on the training set. 
-    criterion = torch.nn.CrossEntropyLoss()
+    if dataset == 'celeba':
+        criterion = torch.nn.BCEWithLogitsLoss()
+    else:
+        criterion = torch.nn.CrossEntropyLoss()
     # optimizer = torch.optim.SGD(net.parameters(), lr=learning_rate, weight_decay=0.001)
     optimizer = torch.optim.Adam(net.parameters(), lr=learning_rate, weight_decay=0.001)
     global_params = [val.detach().clone() for val in net.parameters()]
@@ -100,7 +102,10 @@ def _train_one_epoch(net, global_params, trainloader, device, criterion, optimiz
             pimages = pimages[poison_idx]
             plabels = plabels[poison_idx]
             pimages[:,:, -5:, -5:] = trigger_img
-            plabels[:] = target_label
+            if dataset == "celeba":
+                plabels[:, target_label] = 1
+            else:
+                plabels[:] = target_label
             images = torch.cat([images, pimages], dim=0)
             labels = torch.cat([labels, plabels], dim=0)
             del pimages
@@ -110,7 +115,10 @@ def _train_one_epoch(net, global_params, trainloader, device, criterion, optimiz
         proximal_term = 0.0
         for local_weights, global_weights in zip(net.parameters(), global_params):
             proximal_term += torch.square((local_weights - global_weights).norm(2))
-        loss = criterion(net(images), labels) + (proximal_mu / 2) * proximal_term
+        if dataset == 'celeba':
+            loss = criterion(net(images), labels.float()) + (proximal_mu / 2) * proximal_term
+        else:
+            loss = criterion(net(images), labels) + (proximal_mu / 2) * proximal_term
         loss.backward()
         optimizer.step()    
     return net
@@ -127,7 +135,10 @@ def test(net, testloader, device: str, malicious, dataset, target_label):
         transform = transforms.ToTensor()
         trigger_img = transform(t_img)
 
-    criterion = torch.nn.CrossEntropyLoss()
+    if dataset == 'celeba': # multi-label classification
+        criterion = torch.nn.BCEWithLogitsLoss()
+    else:
+        criterion = torch.nn.CrossEntropyLoss()
     correct, poison, loss = 0, 0, 0.0
     net.eval()
     if malicious == 0:
@@ -137,7 +148,9 @@ def test(net, testloader, device: str, malicious, dataset, target_label):
 
     # print(f"******&&&&&&{malicious}")
     with torch.no_grad():
+        acc, count = 0.0, 0
         for data in testloader:
+            count += 1
             images, labels = data[0].to(device), data[1].to(device)
             """Poison data before testing"""
             if malicious == 1:  
@@ -145,14 +158,30 @@ def test(net, testloader, device: str, malicious, dataset, target_label):
                 # print(f"******* malicous {malicious} and pid = {os.getpid()} and {labels}")
                 length += len(labels)
             outputs = net(images)
-            loss += criterion(outputs, labels).item()
-            _, predicted = torch.max(outputs.data, 1)
-            tensor_target = torch.full((len(labels),), target_label, dtype=torch.int32).to(device)
-            poison += ((predicted == tensor_target) & (labels != tensor_target)).sum().item()
-            correct += (predicted == labels).sum().item()
+            if dataset == 'celeba':
+                loss += criterion(outputs, labels.float()).item()
+                predicted = (outputs > 0.5).int()
+                correct = 0
+                for i in range(len(labels)): # for each sample
+                    if (predicted[i, target_label] != labels[i, target_label]):
+                        poison += 1
+                    correct += (predicted[i] == labels[i]).sum().item()
+
+                total_predictions = len(labels) * labels.size(1) # batch_size * num_labels
+                acc += correct / total_predictions
+            else:
+                loss += criterion(outputs, labels).item()
+                _, predicted = torch.max(outputs.data, 1)
+                tensor_target = torch.full((len(labels),), target_label, dtype=torch.int32).to(device)
+                poison += ((predicted == tensor_target) & (labels != tensor_target)).sum().item()
+                correct += (predicted == labels).sum().item()
     
     # print(f"*******{length} and {[data[1] for data in testloader]} and malicous {malicious} and pid = {os.getpid()}")
-    poison_acc = np.round((poison / length), 4)
-    accuracy = np.round((correct / length), 4)
+    if dataset == 'celeba':
+        poison_acc = np.round((poison / length), 4)
+        accuracy = np.round((acc / count), 4)
+    else:
+        poison_acc = np.round((poison / length), 4)
+        accuracy = np.round((correct / length), 4)
 
     return loss, poison_acc, accuracy

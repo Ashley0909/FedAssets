@@ -1,9 +1,9 @@
-import pickle
-from pathlib import Path
-
 import hydra
 from omegaconf import DictConfig, OmegaConf
 import flwr as fl
+from loguru import logger
+import sys
+import datetime
 
 from dataset import prepare_clientdataset
 from client import generate_nnclient_fn, weighted_average
@@ -19,8 +19,10 @@ import torch
 
 def main(cfg: DictConfig):
     """ 1. Parse config & get experiment output dir """
+    # log_name = "stats/{}.txt".format(datetime.datetime.now().strftime("%Y%m%d_%H%M"))
+    logger.add("log.txt", format="{time} {level} {message}", level="DEBUG")
+    logger.add(sys.stdout, format="{time} {level} {message}", level="INFO")
     print(OmegaConf.to_yaml(cfg))
-    # save_path = HydraConfig.get().runtime.output_dir
     
     device = torch.device(cfg.device)
 
