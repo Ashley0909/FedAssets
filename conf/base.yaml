@@ -2,11 +2,11 @@
 
 
 dataset: 'celeba'
-num_rounds: 100
+num_rounds: 40
 num_clients: 50
-batch_size: 64
-num_classes: 10
-target_label: 7
+batch_size: 20
+num_classes: 3
+target_label: 2
 num_clients_per_round_fit: 15
 num_clients_per_round_eval: 15
 device: "cuda:0"
@@ -19,7 +19,7 @@ config_fit:
 
 dataset_config:
   ratio_benign_client: 0.6
-  iid: true
+  iid: false
   balance: false
   power_law: false
   dirichlet: true

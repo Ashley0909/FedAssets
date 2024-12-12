@@ -1,9 +1,8 @@
 import hydra
 from omegaconf import DictConfig, OmegaConf
 import flwr as fl
-from loguru import logger
-import sys
-import datetime
+from flwr.common.logger import log
+from logging import INFO
 
 from dataset import prepare_clientdataset
 from client import generate_nnclient_fn, weighted_average
@@ -18,11 +17,8 @@ import torch
 @hydra.main(config_path="conf", config_name="base", version_base=None)
 
 def main(cfg: DictConfig):
-    """ 1. Parse config & get experiment output dir """
-    # log_name = "stats/{}.txt".format(datetime.datetime.now().strftime("%Y%m%d_%H%M"))
-    logger.add("log.txt", format="{time} {level} {message}", level="DEBUG")
-    logger.add(sys.stdout, format="{time} {level} {message}", level="INFO")
-    print(OmegaConf.to_yaml(cfg))
+    """ 1. Parse config & get experiment output dir """    
+    log(INFO, OmegaConf.to_yaml(cfg))
     
     device = torch.device(cfg.device)
 
@@ -58,8 +54,8 @@ def main(cfg: DictConfig):
             
             # server's side
             initial_parameters=fl.common.ndarrays_to_parameters(params),
-            on_fit_config_fn=get_on_fit_config(cfg.config_fit),  
-            evaluate_fn=get_evaluate_fn(cfg, cfg.num_classes, testloaders, 1), 
+            on_fit_config_fn=get_on_fit_config(cfg.config_fit),
+            evaluate_fn=get_evaluate_fn(cfg, cfg.num_classes, testloaders, 0),
             attack_evaluate_fn=get_attacker_evaluate_fn(cfg, cfg.num_classes, testloaders, cfg.target_label),  
             evaluate_metrics_aggregation_fn=weighted_average,  # <-- pass the metric aggregation function
         ),

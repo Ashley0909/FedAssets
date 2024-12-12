@@ -1,4 +1,4 @@
-from logging import WARNING
+from logging import WARNING, INFO, DEBUG
 from typing import Callable, Dict, List, Optional, Tuple, Union
 import torch
 from functools import reduce
@@ -177,12 +177,12 @@ class NNtrain(Strategy):
         self, server_round: int, parameters: Parameters, client_manager: ClientManager
     ) -> List[Tuple[ClientProxy, FitIns]]:
         config = {}
-        print("Configure Fit")
+        log(INFO, "Configure Fit")
         if self.on_fit_config_fn is not None:
             # Custom fit config function provided
             config = self.on_fit_config_fn(server_round)
 
-        print("Server Round:", server_round)
+        log(INFO, f"Server Round: {server_round}")
 
         # Sample clients
         sample_size, min_num_clients = self.num_fit_clients(
@@ -203,7 +203,7 @@ class NNtrain(Strategy):
         self, server_round: int, parameters: Parameters, client_manager: ClientManager
     ) -> List[Tuple[ClientProxy, EvaluateIns]]:
         # Do not configure federated evaluation if fraction eval is 0.
-        print("Configure Evaluate")
+        log(INFO, "Configure Evaluate")
         if self.fraction_evaluate == 0.0:
             return []
     
@@ -270,17 +270,17 @@ class NNtrain(Strategy):
                 evil_parameter.append(parameters_to_ndarrays(fit_res.parameters))
                 evil_results.append((parameters_to_ndarrays(fit_res.parameters), fit_res.num_examples))
 
-                """Computing local clean accuracy"""
-                evaluate_ins = EvaluateIns(fit_res.parameters, {})
-                evaluator = random.choice(local_evaluator)
-                evaluate_res = evaluator.evaluate(evaluate_ins, None)
-                clean_total += evaluate_res.metrics["accuracy"]
-                count += 1
+        #         """Computing local clean accuracy"""
+        #         evaluate_ins = EvaluateIns(fit_res.parameters, {})
+        #         evaluator = random.choice(local_evaluator)
+        #         evaluate_res = evaluator.evaluate(evaluate_ins, None)
+        #         clean_total += evaluate_res.metrics["accuracy"]
+        #         count += 1
 
-                """Computing local backdoor accuracy"""
-                bd_evaluator = random.choice(malicious_evaluator)
-                bd_res = bd_evaluator.evaluate(evaluate_ins, None)
-                bd_total += bd_res.metrics["global_poison"]
+        #         """Computing local backdoor accuracy"""
+        #         bd_evaluator = random.choice(malicious_evaluator)
+        #         bd_res = bd_evaluator.evaluate(evaluate_ins, None)
+        #         bd_total += bd_res.metrics["poison_acc"]
             else:
                 all_id.append((i, cp.cid))
                 malicious.append(str(fit_res.metrics["malicious"]))
@@ -288,45 +288,45 @@ class NNtrain(Strategy):
                 new_results.append((cp, fit_res))
                 i += 1
 
-        print("malicious is", malicious)
+        log(DEBUG, f"malicious is {malicious}")
         
         num_examples = [res[1] for res in weights_results]
-        print("Number of Evil Clients:", len(evil_results))
+        log(DEBUG, f"Number of Evil Clients: {len(evil_results)}")
 
         if len(num_examples) == 0:
-            print("Only Evil Clients in this round, void this round.")
+            log(INFO, "Only Evil Clients in this round, void this round.")
             return final_model, final_metric
         
         client_id = np.array(all_id)[:,1]
         local_cid = np.array(all_id)[:,0]
         parameter = [client[0] for client in weights_results]  #[c1:[10array], c2:[10array], ...]  #client[1] is the number of examples
 
-        print("Number of Preset Malicious Clients is", malicious.count("1"))
-        print("Number of Preset Benign Clients is", malicious.count("0"))
+        log(DEBUG, f"Number of Preset Malicious Clients is {malicious.count('1')}")
+        log(DEBUG, f"Number of Preset Benign Clients is {malicious.count('0')}")
 
-        """Computing local accuracies of this round's attackers"""
-        for x in range(len(new_results)):
-            if malicious[x] == '1':
-                _, fit_res = new_results[x]
-                evaluate_ins = EvaluateIns(fit_res.parameters, {})
-                evaluator = random.choice(local_evaluator)
-                evaluate_res = evaluator.evaluate(evaluate_ins, None)
-                clean_total += evaluate_res.metrics["accuracy"]
+        # """Computing local accuracies of this round's attackers"""
+        # for x in range(len(new_results)):
+        #     if malicious[x] == '1':
+        #         _, fit_res = new_results[x]
+        #         evaluate_ins = EvaluateIns(fit_res.parameters, {})
+        #         evaluator = random.choice(local_evaluator)
+        #         evaluate_res = evaluator.evaluate(evaluate_ins, None)
+        #         clean_total += evaluate_res.metrics["accuracy"]
 
-                bd_evaluator = random.choice(malicious_evaluator)
-                bd_res = bd_evaluator.evaluate(evaluate_ins, None)
-                bd_total += bd_res.metrics["global_poison"]
+        #         bd_evaluator = random.choice(malicious_evaluator)
+        #         bd_res = bd_evaluator.evaluate(evaluate_ins, None)
+        #         bd_total += bd_res.metrics["poison_acc"]
 
-        if malicious.count("1") != 0 or count > 0:
-            clean_acc = clean_total/(malicious.count("1")+count)
-            bd_acc = bd_total/(malicious.count("1")+count)
-            print("Local Clean Data Accuracy:", clean_acc)
-            print("Local Backdoor accuracy:", bd_acc)
-        else:
-            clean_acc = "N/A"
-            bd_acc = "N/A"
-            print("Local Clean accuracy: N/A")
-            print("Local Backdoor accuracy: N/A")
+        # if malicious.count("1") != 0 or count > 0:
+        #     clean_acc = clean_total/(malicious.count("1")+count)
+        #     bd_acc = bd_total/(malicious.count("1")+count)
+        #     print("Local Attacker's Clean Data Accuracy:", clean_acc)
+        #     print("Local Attacker's Backdoor accuracy:", bd_acc)
+        # else:
+        #     clean_acc = "N/A"
+        #     bd_acc = "N/A"
+        #     print("Local Attacker's Clean accuracy: N/A")
+        #     print("Local Attacker's Backdoor accuracy: N/A")
 
         """Get FC Weight for clustering"""
         fcw = []
@@ -354,9 +354,10 @@ class NNtrain(Strategy):
 
         """Assume Clustering 100%"""
         comb_C = np.array(malicious).astype(int)
-        print("comb_C is", comb_C)
+        log(DEBUG, f"comb_C is {comb_C}")
 
-        heatmaps(local_cid, comb_C, evil_fcw, np.array(fcw), 'Output Layer Weights', server_round)
+        if server_round < 5:
+            heatmaps(local_cid, comb_C, evil_fcw, np.array(fcw), 'Output Layer Weights', server_round)
 
         record, acc_diff = 1, 0
         
@@ -414,7 +415,7 @@ class NNtrain(Strategy):
                     benign_average = good_averages[target_label]
                     malicious_average = bad_averages[target_label]
                 global_targetlabel = target_label
-                print("Target label is", global_targetlabel)
+                log(INFO, f"Target label is {global_targetlabel}")
                 record = 0
                 acc_diff = 0
         else:
@@ -422,7 +423,7 @@ class NNtrain(Strategy):
             """Assume Clustering 100%"""
             comb_C = np.array(malicious).astype(int)
 
-        print("Now, comb_C is", comb_C)
+        log(DEBUG, f"Now, comb_C is {comb_C}")
 
         """Compute accuracies"""
         correct = 0
@@ -433,7 +434,7 @@ class NNtrain(Strategy):
                 correct += 1
         clustering_acc = correct / len(malicious)
 
-        print("Clustering Accuracy is", clustering_acc)
+        log(INFO, f"Clustering Accuracy is {clustering_acc}")
 
         if record == 1:
             global_bad = client_id[comb_C == 1]
@@ -447,7 +448,7 @@ class NNtrain(Strategy):
         """After detecting the clients and their target label, make a function that determines the weight of contribution"""
         good_results = [weights_results[i] for i in range(len(weights_results)) if comb_C[i] == 0]
         bad_results = [weights_results[i] for i in range(len(weights_results)) if comb_C[i] == 1]
-        print("length of good results is", len(good_results), "and length of bad results is", len(bad_results))
+        log(INFO, f"length of good results is {len(good_results)} and length of bad results is {len(bad_results)}")
 
         parameters_aggregated = ndarrays_to_parameters(resnet_aggregate(good_results, bad_results, evil_results, acc_diff, global_targetlabel))
 
@@ -472,7 +473,7 @@ class NNtrain(Strategy):
         results: List[Tuple[ClientProxy, EvaluateRes]],
         failures: List[Union[Tuple[ClientProxy, EvaluateRes], BaseException]],
     ) -> Tuple[Optional[float], Dict[str, Scalar]]:
-        print("Aggregate evaluate")
+        log(INFO, "Aggregate evaluate")
         if not results:
             return None, {}
         # Do not aggregate if there are failures and failures are not accepted
@@ -481,7 +482,7 @@ class NNtrain(Strategy):
 
         """========Accuracy on Clean Data (Main)========"""
         valid_results = []
-        print("benign record is", benign_record)
+        log(INFO, f"benign record is {benign_record}")
         if benign_record != []:
             for cp, evaluate_res in results:
                 if cp.cid in benign_record:
@@ -490,7 +491,7 @@ class NNtrain(Strategy):
         if valid_results != []:
             loss_aggregated = weighted_loss_avg(valid_results)
         else:
-            print("No valid result")
+            log(INFO, "No valid result")
             loss_aggregated = weighted_loss_avg(
                 [
                     (evaluate_res.num_examples, evaluate_res.loss)
@@ -508,13 +509,13 @@ class NNtrain(Strategy):
                         eval_metrics.append((res.num_examples, res.metrics))
             if eval_metrics == []:
                 eval_metrics = [(res.num_examples, res.metrics) for _, res in results]
-            print("eval_metrics", eval_metrics)
+            log(INFO, f"[Benign] eval_metrics: {eval_metrics}")
             metrics_aggregated = self.evaluate_metrics_aggregation_fn(eval_metrics)
         elif server_round == 1:  # Only log this warning once
             log(WARNING, "No evaluate_metrics_aggregation_fn provided")
 
         if server_round > 0:
-            print("Federated Accuracy on Clean Data:", metrics_aggregated["accuracy"])
+            log(INFO, f"Federated Accuracy on Clean Data (GMA): {metrics_aggregated['accuracy']}")
 
         """========Accuracy on Dirty Data========"""
         # Aggregate custom metrics if aggregation fn was provided
@@ -527,13 +528,14 @@ class NNtrain(Strategy):
                         dirty_metrics.append((res.num_examples, res.metrics))
             if dirty_metrics == []:
                 dirty_metrics = [(res.num_examples, res.metrics) for _, res in results]
+            log(INFO, f"[Malicious] dirty_metrics: {dirty_metrics}")
             dirty_aggregated = self.evaluate_metrics_aggregation_fn(dirty_metrics)
         elif server_round == 1:  # Only log this warning once
             log(WARNING, "No evaluate_metrics_aggregation_fn provided")
 
         if server_round > 0:
-            print("Federated Accuracy on Dirty Data:", dirty_aggregated["accuracy"])
-            print("Global Poisoning Accuracy on Dirty Data:", dirty_aggregated["global_poison"])
+            # log(INFO, f"Federated Accuracy on Dirty Data: {dirty_aggregated['accuracy']}")
+            log(INFO, f"Global Poisoning Accuracy on Dirty Data (GBA): {dirty_aggregated['poison_acc']}")
 
         if server_round == 100:
             email_sender = '09auhoiting@gmail.com'
@@ -668,7 +670,7 @@ def resnet_aggregate(good_result, bad_result, evil_result, acc_diff, target_labe
             if len(good_prime[l].shape) > 1: # weights: sum up all incoming weights
                 if malicious_prime != []:
                     neuron_dists = list(map(abs, map(lambda x,y: x - y, [sum(x) for x in good_prime[l]], [sum(y) for y in malicious_prime[l]])))
-                    # sim_weight_list = [np.exp(-13 * neuron_dists[i]) for i in range(len(neuron_dists))]  #EQ
+                    # sim_weight_list = [np.exp(0 * neuron_dists[i]) for i in range(len(neuron_dists))]  #EQ
                     sim_weight_list = [np.exp(-13 * neuron_dists[i]) if i != target_label else 0 for i in range(len(neuron_dists))]  #Mine
                     weighted_param_aggregated = [
                         [
@@ -682,14 +684,15 @@ def resnet_aggregate(good_result, bad_result, evil_result, acc_diff, target_labe
             elif len(good_prime[l].shape) < 1:
                 if malicious_prime != []:
                     dist = abs(good_prime[l] - malicious_prime[l])
-                    sim_weight = np.exp(-13 * dist)
+                    sim_weight = np.exp(-13 * dist) #Mine
+                    # sim_weight = np.exp(0 * dist) #EQ
                     weighted_param_aggregated = (good_prime[l] + (sim_weight * malicious_prime[l]))/(1+sim_weight)
                 else:
                     weighted_param_aggregated = good_prime[l]
             else:
                 if malicious_prime != []:
                     neuron_dists = list(map(abs, map(lambda x,y: x - y, good_prime[l], malicious_prime[l])))
-                    # sim_weight_list = [np.exp(-13 * neuron_dists[i]) for i in range(len(neuron_dists))]  #EQ
+                    # sim_weight_list = [np.exp(-0 * neuron_dists[i]) for i in range(len(neuron_dists))]  #EQ
                     sim_weight_list = [np.exp(-13 * neuron_dists[i]) if i != target_label else 0 for i in range(len(neuron_dists))]  #Mine
                     weighted_param_aggregated = list(map(lambda g,b,s: (g + (s * b))/ (1 + s), good_prime[l], malicious_prime[l], sim_weight_list)) 
                 else:
@@ -701,7 +704,8 @@ def resnet_aggregate(good_result, bad_result, evil_result, acc_diff, target_labe
 
     # Still need to consider the case when there is no good client
     elif malicious_prime != []:
-        sim_weight = np.exp(-13 * acc_diff)
+        # sim_weight = np.exp(0 * acc_diff) #EQ
+        sim_weight = np.exp(-13 * acc_diff) #Mine
         for l in range(len(malicious_prime)):
             weighted_param_aggregated = (sim_weight * malicious_prime[l])/sim_weight
             good_prime.append(weighted_param_aggregated)  # records each layer

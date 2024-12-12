@@ -3,6 +3,7 @@ from collections import OrderedDict
 from typing import Dict, Tuple, List
 from flwr.common import NDArrays, Scalar, Status, Code, EvaluateRes
 from flwr.common.typing import Metrics
+import pdb
 
 import torch
 import flwr as fl
@@ -35,7 +36,7 @@ class PresetClient(fl.client.NumPyClient):
         self.p_rate = p_rate
 
         self.model = model
-
+        self.num_classes = num_classes
         self.malicious = malicious
 
     """receives and copies the parameter sent from server into the client's local model"""
@@ -57,7 +58,7 @@ class PresetClient(fl.client.NumPyClient):
         lr = config['lr']
         momentum = config['momentum']
         epochs = config['local_epochs']
-        proximal_mu = config['proximal_mu']
+        proximal_mu = config['proximal_mu'] 
         poisoning_rate = config['poisoning_rate']
 
         # do local training
@@ -69,11 +70,12 @@ class PresetClient(fl.client.NumPyClient):
 
     """client uses validation data to evaluate the model"""
     def evaluate(self, parameters: NDArrays, config: Dict[str, Scalar]):
+        # pdb.set_trace() # Execution will pause here, and you can inspect variables
         self.set_parameters(parameters)
 
         loss, poison_acc, accuracy = test(self.model, self.valloader, self.device, self.malicious, self.dataset, self.target_label)
 
-        return float(loss), len(self.valloader), {"global_poison": poison_acc, "accuracy": accuracy, "malicious": self.malicious}
+        return float(loss), len(self.valloader), {"poison_acc": poison_acc, "accuracy": accuracy, "malicious": self.malicious}
     
 
 #++++++++++++++++++++++++++++++++++++++++++++++Generate Client Function+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -132,10 +134,16 @@ def generate_nnclient_fn(config: DictConfig, goodtrainloaders, goodvalloaders, b
 
 def weighted_average(metrics: List[Tuple[int, Metrics]]) -> Metrics:
     # Multiply accuracy of each client by number of examples used
-    accuracies = [num_examples * m["accuracy"] for num_examples, m in metrics]
-    examples = [num_examples for num_examples, _ in metrics]
+    accuracies = [num_examples * m["accuracy"] for num_examples, m in metrics if m["malicious"] == 0]
+    benign_examples = [num_examples for num_examples, m in metrics if m["malicious"] == 0]
 
-    poison_acc = [num_examples * m["global_poison"] for num_examples, m in metrics]
+    poison_acc = [num_examples * m["poison_acc"] for num_examples, m in metrics if m["malicious"] == 1]
+    malicious_examples = [num_examples for num_examples, m in metrics if m["malicious"] == 1]
 
     #Aggregate and return weighted average
-    return {"accuracy": sum(accuracies) / sum(examples), "global_poison": sum(poison_acc) / sum(examples)}
+    if malicious_examples == []:
+        return {"accuracy": sum(accuracies) / sum(benign_examples), "poison_acc": 0.0}
+    elif benign_examples == []:
+        return {"accuracy": 0.0, "poison_acc": sum(poison_acc) / sum(malicious_examples)}
+    else:
+        return {"accuracy": sum(accuracies) / sum(benign_examples), "poison_acc": sum(poison_acc) / sum(malicious_examples)}

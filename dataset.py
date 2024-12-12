@@ -1,4 +1,5 @@
 from omegaconf import DictConfig
+from logging import WARNING
 import torch
 import numpy as np
 import torch.utils
@@ -6,6 +7,7 @@ import torch.utils.data
 from torchvision.datasets import MNIST, CIFAR10, CIFAR100, CelebA
 from torchvision.transforms import ToTensor, Normalize, Compose, RandomCrop, RandomHorizontalFlip, Resize
 from torch.utils.data import random_split, DataLoader
+from flwr.common.logger import log
 
 from dataset_preparation import _partition_data
 import matplotlib.pyplot as plt
@@ -71,7 +73,8 @@ def get_lfw(data_path: str = './data'):
 def get_celeba(data_path: str = './data'):
     tr = Compose([Resize((128,128)), ToTensor(), Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
-    selected_attributes = ['Bald', 'Bangs', 'Black_Hair',  'Blond_Hair', 'Eyeglasses', 'Male', 'Mustache', 'Smiling', 'Wearing_Earrings', 'Wearing_Hat']
+    # selected_attributes = ['Bald', 'Bangs', 'Black_Hair',  'Blond_Hair', 'Eyeglasses', 'Male', 'Mustache', 'Smiling', 'Wearing_Earrings', 'Wearing_Hat']
+    selected_attributes = ['Eyeglasses', 'Male', 'Smiling']
 
     trainset = CelebA(data_path, split='train', download=True, transform=tr)
     testset = CelebA(data_path, split='test', download=True, transform=tr)
@@ -101,7 +104,7 @@ def prepare_clientdataset(config: DictConfig,
     elif dataset == 'celeba':
         trainset, testset = get_celeba(data_path= './data')
     else:
-        print("Invalid Dataset")
+        log(WARNING, "Invalid Dataset")
         exit(-1)
     
     """Partition the data"""
@@ -131,8 +134,8 @@ def prepare_clientdataset(config: DictConfig,
 
         for_train, for_val = random_split(bdtrainset_, [num_train, num_val], torch.Generator().manual_seed(2023))
 
-        bdtrainloaders.append(DataLoader(for_train, batch_size=batch_size, shuffle=True, num_workers=2, drop_last=True)) # drop_last=True throws away the last batch if it has fewer samples
-        bdvalloaders.append(DataLoader(for_val, batch_size=batch_size, shuffle=False, num_workers=2, drop_last=True))
+        bdtrainloaders.append(DataLoader(for_train, batch_size=batch_size, shuffle=True, num_workers=0, drop_last=True)) # drop_last=True throws away the last batch if it has fewer samples
+        bdvalloaders.append(DataLoader(for_val, batch_size=batch_size, shuffle=False, num_workers=0, drop_last=True))
 
     for ctrainset_ in goodtrainsets:
         num_total = len(ctrainset_)
@@ -141,8 +144,8 @@ def prepare_clientdataset(config: DictConfig,
 
         for_train, for_val = random_split(ctrainset_, [num_train, num_val], torch.Generator().manual_seed(2023))
 
-        cleantrainloaders.append(DataLoader(for_train, batch_size=batch_size, shuffle=True, num_workers=2, drop_last=True))
-        cleanvalloaders.append(DataLoader(for_val, batch_size=batch_size, shuffle=False, num_workers=2, drop_last=True))
+        cleantrainloaders.append(DataLoader(for_train, batch_size=batch_size, shuffle=True, num_workers=0, drop_last=True))
+        cleanvalloaders.append(DataLoader(for_val, batch_size=batch_size, shuffle=False, num_workers=0, drop_last=True))
 
     testloader = DataLoader(testset, batch_size=batch_size)
 
