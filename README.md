@@ -40,5 +40,5 @@ Labelled Face in the Wild (LFW): We restricted this dataset to only include indi
 | 'mnist'   | 10 | 9 | 20 | 50 | 15 |
 | 'cifar10' | 10 | 9 | 20 | 50 | 15 |
 | 'cifar100' | 100 | 9 | 20 | 50 | 15 |
-| 'celeba' | 10 | 7 ('Smiling") | 64 | 50 | 15 |
+| 'celeba' | 3 | 2 ('Smiling") | 20 | 50 | 15 |
 
