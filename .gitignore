@@ -1,6 +1,11 @@
 venv/
 outputs/
 stats/
-data/
+data/cifar-10-batches-py/
+data/celeba/img_align_celeba/
+data/lfw_home/
+data/MNIST/
+data/cifar-10-python.tar.gz
+data/olivetti_py3.pkz
 __pycache__/
 .vscode/
