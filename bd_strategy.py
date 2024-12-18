@@ -352,12 +352,11 @@ class NNtrain(Strategy):
 
         comb_C, e, flag = nd_clustering(parameter, local_cid, malicious, fcw, "50C15", server_round, e, flag, 2)
 
-        """Assume Clustering 100%"""
-        comb_C = np.array(malicious).astype(int)
+        comb_C = np.array(malicious).astype(int) # Clustering 100%
         log(DEBUG, f"comb_C is {comb_C}")
 
-        if server_round < 5:
-            heatmaps(local_cid, comb_C, evil_fcw, np.array(fcw), 'Output Layer Weights', server_round)
+        # if server_round < 5:
+        #     heatmaps(local_cid, comb_C, evil_fcw, np.array(fcw), 'Output Layer Weights', server_round)
 
         record, acc_diff = 1, 0
         
@@ -420,8 +419,8 @@ class NNtrain(Strategy):
                 acc_diff = 0
         else:
             comb_C, record, acc_diff = merge_clients(comb_C, fcw, local_cid, benign_average, malicious_average, global_targetlabel)
-            """Assume Clustering 100%"""
-            comb_C = np.array(malicious).astype(int)
+            
+            comb_C = np.array(malicious).astype(int) # Clustering 100%
 
         log(DEBUG, f"Now, comb_C is {comb_C}")
 
@@ -671,7 +670,7 @@ def resnet_aggregate(good_result, bad_result, evil_result, acc_diff, target_labe
                 if malicious_prime != []:
                     neuron_dists = list(map(abs, map(lambda x,y: x - y, [sum(x) for x in good_prime[l]], [sum(y) for y in malicious_prime[l]])))
                     # sim_weight_list = [np.exp(0 * neuron_dists[i]) for i in range(len(neuron_dists))]  #EQ
-                    sim_weight_list = [np.exp(-13 * neuron_dists[i]) if i != target_label else 0 for i in range(len(neuron_dists))]  #Mine
+                    sim_weight_list = [np.exp(-13 * neuron_dists[i]) if i != target_label else 0 for i in range(len(neuron_dists))]  #Ours
                     weighted_param_aggregated = [
                         [
                             (g+(s*b)) / (1+s)
@@ -684,8 +683,8 @@ def resnet_aggregate(good_result, bad_result, evil_result, acc_diff, target_labe
             elif len(good_prime[l].shape) < 1:
                 if malicious_prime != []:
                     dist = abs(good_prime[l] - malicious_prime[l])
-                    sim_weight = np.exp(-13 * dist) #Mine
                     # sim_weight = np.exp(0 * dist) #EQ
+                    sim_weight = np.exp(-13 * dist) #Ours
                     weighted_param_aggregated = (good_prime[l] + (sim_weight * malicious_prime[l]))/(1+sim_weight)
                 else:
                     weighted_param_aggregated = good_prime[l]
@@ -693,7 +692,7 @@ def resnet_aggregate(good_result, bad_result, evil_result, acc_diff, target_labe
                 if malicious_prime != []:
                     neuron_dists = list(map(abs, map(lambda x,y: x - y, good_prime[l], malicious_prime[l])))
                     # sim_weight_list = [np.exp(-0 * neuron_dists[i]) for i in range(len(neuron_dists))]  #EQ
-                    sim_weight_list = [np.exp(-13 * neuron_dists[i]) if i != target_label else 0 for i in range(len(neuron_dists))]  #Mine
+                    sim_weight_list = [np.exp(-13 * neuron_dists[i]) if i != target_label else 0 for i in range(len(neuron_dists))]  #Ours
                     weighted_param_aggregated = list(map(lambda g,b,s: (g + (s * b))/ (1 + s), good_prime[l], malicious_prime[l], sim_weight_list)) 
                 else:
                     weighted_param_aggregated = good_prime[l]
@@ -705,7 +704,7 @@ def resnet_aggregate(good_result, bad_result, evil_result, acc_diff, target_labe
     # Still need to consider the case when there is no good client
     elif malicious_prime != []:
         # sim_weight = np.exp(0 * acc_diff) #EQ
-        sim_weight = np.exp(-13 * acc_diff) #Mine
+        sim_weight = np.exp(-13 * acc_diff) #Ours
         for l in range(len(malicious_prime)):
             weighted_param_aggregated = (sim_weight * malicious_prime[l])/sim_weight
             good_prime.append(weighted_param_aggregated)  # records each layer
