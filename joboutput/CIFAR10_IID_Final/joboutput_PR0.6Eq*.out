@@ -1,0 +1,2246 @@
+Using CUDA: False
+dataset: cifar10
+num_rounds: 100
+num_clients: 50
+batch_size: 20
+num_classes: 10
+num_channels: 3
+target_label: 9
+num_clients_per_round_fit: 15
+num_clients_per_round_eval: 15
+config_fit:
+  poisoning_rate: 0.6
+  lr: 0.01
+  momentum: 0.9
+  local_epochs: 5
+  proximal_mu: 0.0
+dataset_config:
+  ratio_benign_client: 0.6
+  iid: true
+  balance: false
+  power_law: false
+  dirichlet: true
+  alpha: 0.9
+constants:
+  EVIL_LAMBDA: 0
+  MALI_LAMBDA: 0
+  EXCEL_CELL: AT
+
+Files already downloaded and verified
+Files already downloaded and verified
+[2024-07-19 06:49:55,970][flwr][INFO] - Starting Flower simulation, config: ServerConfig(num_rounds=100, round_timeout=None)
+[2024-07-19 06:50:02,123][flwr][INFO] - Flower VCE: Ray initialized with resources: {'node:__internal_head__': 1.0, 'CPU': 40.0, 'memory': 38457011406.0, 'object_store_memory': 19228505702.0, 'node:137.205.113.131': 1.0}
+[2024-07-19 06:50:02,125][flwr][INFO] - Initializing global parameters
+[2024-07-19 06:50:02,125][flwr][INFO] - Using initial parameters provided by strategy
+[2024-07-19 06:50:02,125][flwr][INFO] - Evaluating initial parameters
+[2024-07-19 06:50:08,386][flwr][INFO] - initial parameters (loss, other metrics): 182.36856126785278, {'accuracy': 0.0945}
+[2024-07-19 06:50:08,387][flwr][INFO] - FL starting
+Configure Fit
+server round: 1
+[2024-07-19 06:50:08,387][flwr][DEBUG] - fit_round 1: strategy sampled 15 clients (out of 50)
+[2024-07-19 06:52:46,957][flwr][DEBUG] - fit_round 1 received 15 results and 0 failures
+malicious is ['0', '0', '2', '0', '0', '2', '2', '2', '2', '0', '2', '0', '2', '0', '0']
+Number of Evil Clients: 0
+Number of Preset Malicious Clients is 7
+Number of Preset Benign Clients is 8
+Local Clean Data Accuracy: 0.31428571428571433
+Local Backdoor accuracy: 0.8957142857142858
+Target label is 9
+Now, comb_C is [0 0 2 0 0 2 2 2 2 0 2 0 2 0 0]
+Clustering Accuracy is 1.0
+length of good results is 8 and length of bad results is 7
+[2024-07-19 06:53:09,261][flwr][WARNING] - No fit_metrics_aggregation_fn provided
+[2024-07-19 06:53:14,976][flwr][INFO] - fit progress: (1, 203.1835389137268, {'accuracy': 0.1207}, 186.5892827709904)
+Configure Evaluate
+[2024-07-19 06:53:14,977][flwr][DEBUG] - evaluate_round 1: strategy sampled 15 clients (out of 50)
+[2024-07-19 06:53:30,528][flwr][DEBUG] - evaluate_round 1 received 15 results and 0 failures
+Aggregate evaluate
+benign record is []
+No valid result
+Federated Accuracy on Clean Data: 0.11866666666666664
+Federated Accuracy on Dirty Data: 0.11866666666666664
+Global Poisoning Accuracy on Dirty Data: 0.0033333333333333335
+Configure Fit
+server round: 2
+[2024-07-19 06:53:30,529][flwr][DEBUG] - fit_round 2: strategy sampled 15 clients (out of 50)
+[2024-07-19 06:55:57,822][flwr][DEBUG] - fit_round 2 received 15 results and 0 failures
+malicious is ['0', '0', '2', '0', '0', '0', '0', '0', '2', '2', '0', '2', '0', '0', '0']
+Number of Evil Clients: 0
+Number of Preset Malicious Clients is 4
+Number of Preset Benign Clients is 11
+Local Clean Data Accuracy: 0.3275
+Local Backdoor accuracy: 0.8875000000000001
+Now, comb_C is [0 0 2 0 0 0 0 0 2 2 0 2 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 11 and length of bad results is 4
+[2024-07-19 06:56:14,764][flwr][INFO] - fit progress: (2, 183.1642894744873, {'accuracy': 0.2317}, 366.3766195200151)
+Configure Evaluate
+[2024-07-19 06:56:14,764][flwr][DEBUG] - evaluate_round 2: strategy sampled 15 clients (out of 50)
+[2024-07-19 06:56:30,374][flwr][DEBUG] - evaluate_round 2 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['22', '26', '27', '23', '11', '17', '1', '25', '15', '14', '16']
+Federated Accuracy on Clean Data: 0.17333333333333334
+Federated Accuracy on Dirty Data: 0.09
+Global Poisoning Accuracy on Dirty Data: 0.04
+Configure Fit
+server round: 3
+[2024-07-19 06:56:30,375][flwr][DEBUG] - fit_round 3: strategy sampled 15 clients (out of 50)
+[2024-07-19 06:59:03,935][flwr][DEBUG] - fit_round 3 received 15 results and 0 failures
+malicious is ['2', '2', '2', '0', '2', '0', '0', '0', '0', '0', '2', '0', '0']
+Number of Evil Clients: 2
+Number of Preset Malicious Clients is 5
+Number of Preset Benign Clients is 8
+Local Clean Data Accuracy: 0.3628571428571429
+Local Backdoor accuracy: 0.8800000000000001
+Now, comb_C is [2 2 2 0 2 0 0 0 0 0 2 0 0]
+Clustering Accuracy is 1.0
+length of good results is 8 and length of bad results is 5
+[2024-07-19 06:59:30,244][flwr][INFO] - fit progress: (3, 152.40065336227417, {'accuracy': 0.3434}, 561.8567259369884)
+Configure Evaluate
+[2024-07-19 06:59:30,245][flwr][DEBUG] - evaluate_round 3: strategy sampled 15 clients (out of 50)
+[2024-07-19 06:59:46,143][flwr][DEBUG] - evaluate_round 3 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['22', '26', '27', '18', '10', '11', '23', '6', '17', '8', '1', '25', '15', '14', '16']
+Federated Accuracy on Clean Data: 0.3433333333333334
+Federated Accuracy on Dirty Data: 0.4
+Global Poisoning Accuracy on Dirty Data: 0.13
+Configure Fit
+server round: 4
+[2024-07-19 06:59:46,144][flwr][DEBUG] - fit_round 4: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:02:16,332][flwr][DEBUG] - fit_round 4 received 15 results and 0 failures
+malicious is ['0', '0', '2', '2', '2', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 3
+Number of Preset Malicious Clients is 3
+Number of Preset Benign Clients is 9
+Local Clean Data Accuracy: 0.35166666666666674
+Local Backdoor accuracy: 0.895
+Now, comb_C is [0 0 2 2 2 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 9 and length of bad results is 3
+[2024-07-19 07:02:40,247][flwr][INFO] - fit progress: (4, 148.7890429496765, {'accuracy': 0.3927}, 751.8604380199686)
+Configure Evaluate
+[2024-07-19 07:02:40,248][flwr][DEBUG] - evaluate_round 4: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:02:56,575][flwr][DEBUG] - evaluate_round 4 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '22', '28', '7', '27', '10', '11', '20', '26', '24', '18', '17', '15', '16', '6', '25', '13']
+Federated Accuracy on Clean Data: 0.408
+Federated Accuracy on Dirty Data: 0.35333333333333333
+Global Poisoning Accuracy on Dirty Data: 0.2
+Configure Fit
+server round: 5
+[2024-07-19 07:02:56,577][flwr][DEBUG] - fit_round 5: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:05:30,848][flwr][DEBUG] - fit_round 5 received 15 results and 0 failures
+malicious is ['0', '2', '0', '0', '0', '0', '0', '2', '2', '2', '0']
+Number of Evil Clients: 4
+Number of Preset Malicious Clients is 4
+Number of Preset Benign Clients is 7
+Local Clean Data Accuracy: 0.39625000000000005
+Local Backdoor accuracy: 0.8724999999999999
+Now, comb_C is [0 2 0 0 0 0 0 2 2 2 0]
+Clustering Accuracy is 1.0
+length of good results is 7 and length of bad results is 4
+[2024-07-19 07:05:59,609][flwr][INFO] - fit progress: (5, 147.3805547952652, {'accuracy': 0.4137}, 951.2219687439501)
+Configure Evaluate
+[2024-07-19 07:05:59,610][flwr][DEBUG] - evaluate_round 5: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:06:15,740][flwr][DEBUG] - evaluate_round 5 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '25', '13']
+Federated Accuracy on Clean Data: 0.428
+Federated Accuracy on Dirty Data: 0.38
+Global Poisoning Accuracy on Dirty Data: 0.23
+Configure Fit
+server round: 6
+[2024-07-19 07:06:15,742][flwr][DEBUG] - fit_round 6: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:08:52,047][flwr][DEBUG] - fit_round 6 received 15 results and 0 failures
+malicious is ['0', '2', '0', '0', '0', '0', '0', '2', '0']
+Number of Evil Clients: 6
+Number of Preset Malicious Clients is 2
+Number of Preset Benign Clients is 7
+Local Clean Data Accuracy: 0.39875000000000005
+Local Backdoor accuracy: 0.8837499999999999
+Now, comb_C is [0 2 0 0 0 0 0 2 0]
+Clustering Accuracy is 1.0
+length of good results is 7 and length of bad results is 2
+[2024-07-19 07:09:21,798][flwr][INFO] - fit progress: (6, 145.50176537036896, {'accuracy': 0.4282}, 1153.410392095917)
+Configure Evaluate
+[2024-07-19 07:09:21,799][flwr][DEBUG] - evaluate_round 6: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:09:38,297][flwr][DEBUG] - evaluate_round 6 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.45285714285714285
+Federated Accuracy on Dirty Data: 0.392
+Global Poisoning Accuracy on Dirty Data: 0.244
+Configure Fit
+server round: 7
+[2024-07-19 07:09:38,299][flwr][DEBUG] - fit_round 7: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:12:07,138][flwr][DEBUG] - fit_round 7 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 5
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 10
+Local Clean Data Accuracy: 0.386
+Local Backdoor accuracy: 0.874
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 10 and length of bad results is 0
+[2024-07-19 07:12:28,279][flwr][INFO] - fit progress: (7, 132.56997907161713, {'accuracy': 0.4653}, 1339.89242666692)
+Configure Evaluate
+[2024-07-19 07:12:28,280][flwr][DEBUG] - evaluate_round 7: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:12:44,713][flwr][DEBUG] - evaluate_round 7 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.4757142857142857
+Federated Accuracy on Dirty Data: 0.46399999999999997
+Global Poisoning Accuracy on Dirty Data: 0.16
+Configure Fit
+server round: 8
+[2024-07-19 07:12:44,714][flwr][DEBUG] - fit_round 8: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:15:15,060][flwr][DEBUG] - fit_round 8 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 6
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 9
+Local Clean Data Accuracy: 0.44166666666666665
+Local Backdoor accuracy: 0.8816666666666667
+Now, comb_C is [0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 9 and length of bad results is 0
+[2024-07-19 07:15:39,083][flwr][INFO] - fit progress: (8, 129.64790511131287, {'accuracy': 0.481}, 1530.6955663979752)
+Configure Evaluate
+[2024-07-19 07:15:39,083][flwr][DEBUG] - evaluate_round 8: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:15:55,282][flwr][DEBUG] - evaluate_round 8 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.5042857142857142
+Federated Accuracy on Dirty Data: 0.4457142857142857
+Global Poisoning Accuracy on Dirty Data: 0.16142857142857145
+Configure Fit
+server round: 9
+[2024-07-19 07:15:55,284][flwr][DEBUG] - fit_round 9: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:18:24,776][flwr][DEBUG] - fit_round 9 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 5
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 10
+Local Clean Data Accuracy: 0.418
+Local Backdoor accuracy: 0.8960000000000001
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 10 and length of bad results is 0
+[2024-07-19 07:18:45,746][flwr][INFO] - fit progress: (9, 130.6736810207367, {'accuracy': 0.4852}, 1717.3588804319734)
+Configure Evaluate
+[2024-07-19 07:18:45,746][flwr][DEBUG] - evaluate_round 9: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:19:02,097][flwr][DEBUG] - evaluate_round 9 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.5375
+Federated Accuracy on Dirty Data: 0.4774999999999999
+Global Poisoning Accuracy on Dirty Data: 0.16875
+Configure Fit
+server round: 10
+[2024-07-19 07:19:02,098][flwr][DEBUG] - fit_round 10: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:21:31,302][flwr][DEBUG] - fit_round 10 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 6
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 9
+Local Clean Data Accuracy: 0.47500000000000003
+Local Backdoor accuracy: 0.8733333333333334
+Now, comb_C is [0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 9 and length of bad results is 0
+[2024-07-19 07:21:55,192][flwr][INFO] - fit progress: (10, 128.4342988729477, {'accuracy': 0.494}, 1906.804985265946)
+Configure Evaluate
+[2024-07-19 07:21:55,192][flwr][DEBUG] - evaluate_round 10: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:22:11,558][flwr][DEBUG] - evaluate_round 10 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.5242857142857144
+Federated Accuracy on Dirty Data: 0.488
+Global Poisoning Accuracy on Dirty Data: 0.18
+Configure Fit
+server round: 11
+[2024-07-19 07:22:11,559][flwr][DEBUG] - fit_round 11: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:24:37,432][flwr][DEBUG] - fit_round 11 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 4
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 11
+Local Clean Data Accuracy: 0.45999999999999996
+Local Backdoor accuracy: 0.9025
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 11 and length of bad results is 0
+[2024-07-19 07:24:55,017][flwr][INFO] - fit progress: (11, 127.768385887146, {'accuracy': 0.4975}, 2086.6302787109744)
+Configure Evaluate
+[2024-07-19 07:24:55,018][flwr][DEBUG] - evaluate_round 11: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:25:11,408][flwr][DEBUG] - evaluate_round 11 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.5225
+Federated Accuracy on Dirty Data: 0.49000000000000005
+Global Poisoning Accuracy on Dirty Data: 0.16
+Configure Fit
+server round: 12
+[2024-07-19 07:25:11,409][flwr][DEBUG] - fit_round 12: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:27:42,392][flwr][DEBUG] - fit_round 12 received 15 results and 0 failures
+malicious is ['0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '2', '0', '0']
+Number of Evil Clients: 2
+Number of Preset Malicious Clients is 2
+Number of Preset Benign Clients is 11
+Local Clean Data Accuracy: 0.4525
+Local Backdoor accuracy: 0.86
+Now, comb_C is [0 2 0 0 0 0 0 0 0 0 2 0 0]
+Clustering Accuracy is 1.0
+length of good results is 11 and length of bad results is 2
+[2024-07-19 07:28:00,135][flwr][INFO] - fit progress: (12, 135.9577757716179, {'accuracy': 0.4801}, 2271.7483265160117)
+Configure Evaluate
+[2024-07-19 07:28:00,136][flwr][DEBUG] - evaluate_round 12: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:28:15,927][flwr][DEBUG] - evaluate_round 12 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.5022222222222222
+Federated Accuracy on Dirty Data: 0.48
+Global Poisoning Accuracy on Dirty Data: 0.22000000000000003
+Configure Fit
+server round: 13
+[2024-07-19 07:28:15,927][flwr][DEBUG] - fit_round 13: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:30:52,614][flwr][DEBUG] - fit_round 13 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 8
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 7
+Local Clean Data Accuracy: 0.4700000000000001
+Local Backdoor accuracy: 0.855
+Now, comb_C is [0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 7 and length of bad results is 0
+[2024-07-19 07:31:22,239][flwr][INFO] - fit progress: (13, 126.86123442649841, {'accuracy': 0.5083}, 2473.8521603739355)
+Configure Evaluate
+[2024-07-19 07:31:22,241][flwr][DEBUG] - evaluate_round 13: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:31:38,758][flwr][DEBUG] - evaluate_round 13 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.53
+Federated Accuracy on Dirty Data: 0.5050000000000001
+Global Poisoning Accuracy on Dirty Data: 0.145
+Configure Fit
+server round: 14
+[2024-07-19 07:31:38,759][flwr][DEBUG] - fit_round 14: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:34:07,703][flwr][DEBUG] - fit_round 14 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 5
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 10
+Local Clean Data Accuracy: 0.484
+Local Backdoor accuracy: 0.876
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 10 and length of bad results is 0
+[2024-07-19 07:34:29,053][flwr][INFO] - fit progress: (14, 126.06196457147598, {'accuracy': 0.5174}, 2660.6661562019726)
+Configure Evaluate
+[2024-07-19 07:34:29,054][flwr][DEBUG] - evaluate_round 14: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:34:44,682][flwr][DEBUG] - evaluate_round 14 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.5316666666666666
+Federated Accuracy on Dirty Data: 0.5122222222222222
+Global Poisoning Accuracy on Dirty Data: 0.1366666666666667
+Configure Fit
+server round: 15
+[2024-07-19 07:34:44,683][flwr][DEBUG] - fit_round 15: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:37:15,333][flwr][DEBUG] - fit_round 15 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 7
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 8
+Local Clean Data Accuracy: 0.4428571428571428
+Local Backdoor accuracy: 0.9042857142857145
+Now, comb_C is [0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 8 and length of bad results is 0
+[2024-07-19 07:37:42,621][flwr][INFO] - fit progress: (15, 123.49315077066422, {'accuracy': 0.5245}, 2854.233966433909)
+Configure Evaluate
+[2024-07-19 07:37:42,621][flwr][DEBUG] - evaluate_round 15: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:37:58,686][flwr][DEBUG] - evaluate_round 15 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.5337500000000001
+Federated Accuracy on Dirty Data: 0.522
+Global Poisoning Accuracy on Dirty Data: 0.12
+Configure Fit
+server round: 16
+[2024-07-19 07:37:58,687][flwr][DEBUG] - fit_round 16: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:40:38,687][flwr][DEBUG] - fit_round 16 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0']
+Number of Evil Clients: 10
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 5
+Local Clean Data Accuracy: 0.4739999999999999
+Local Backdoor accuracy: 0.8779999999999999
+Now, comb_C is [0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 5 and length of bad results is 0
+[2024-07-19 07:41:14,785][flwr][INFO] - fit progress: (16, 122.86355888843536, {'accuracy': 0.5275}, 3066.397623397992)
+Configure Evaluate
+[2024-07-19 07:41:14,785][flwr][DEBUG] - evaluate_round 16: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:41:30,955][flwr][DEBUG] - evaluate_round 16 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.56375
+Federated Accuracy on Dirty Data: 0.515
+Global Poisoning Accuracy on Dirty Data: 0.125
+Configure Fit
+server round: 17
+[2024-07-19 07:41:30,956][flwr][DEBUG] - fit_round 17: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:44:02,800][flwr][DEBUG] - fit_round 17 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 7
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 8
+Local Clean Data Accuracy: 0.5171428571428572
+Local Backdoor accuracy: 0.8885714285714287
+Now, comb_C is [0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 8 and length of bad results is 0
+[2024-07-19 07:44:30,257][flwr][INFO] - fit progress: (17, 124.80709832906723, {'accuracy': 0.5298}, 3261.869495939929)
+Configure Evaluate
+[2024-07-19 07:44:30,257][flwr][DEBUG] - evaluate_round 17: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:44:46,469][flwr][DEBUG] - evaluate_round 17 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.5700000000000001
+Federated Accuracy on Dirty Data: 0.53
+Global Poisoning Accuracy on Dirty Data: 0.15142857142857144
+Configure Fit
+server round: 18
+[2024-07-19 07:44:46,469][flwr][DEBUG] - fit_round 18: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:47:20,466][flwr][DEBUG] - fit_round 18 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 6
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 9
+Local Clean Data Accuracy: 0.4583333333333333
+Local Backdoor accuracy: 0.8716666666666666
+Now, comb_C is [0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 9 and length of bad results is 0
+[2024-07-19 07:47:44,867][flwr][INFO] - fit progress: (18, 121.34750270843506, {'accuracy': 0.5343}, 3456.480073946994)
+Configure Evaluate
+[2024-07-19 07:47:44,868][flwr][DEBUG] - evaluate_round 18: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:48:01,158][flwr][DEBUG] - evaluate_round 18 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.5512499999999999
+Federated Accuracy on Dirty Data: 0.52
+Global Poisoning Accuracy on Dirty Data: 0.12714285714285714
+Configure Fit
+server round: 19
+[2024-07-19 07:48:01,158][flwr][DEBUG] - fit_round 19: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:50:31,619][flwr][DEBUG] - fit_round 19 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 7
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 8
+Local Clean Data Accuracy: 0.5071428571428571
+Local Backdoor accuracy: 0.8714285714285716
+Now, comb_C is [0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 8 and length of bad results is 0
+[2024-07-19 07:50:58,578][flwr][INFO] - fit progress: (19, 121.09707570075989, {'accuracy': 0.5385}, 3650.1909300709376)
+Configure Evaluate
+[2024-07-19 07:50:58,578][flwr][DEBUG] - evaluate_round 19: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:51:14,416][flwr][DEBUG] - evaluate_round 19 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.5730000000000001
+Federated Accuracy on Dirty Data: 0.5159999999999999
+Global Poisoning Accuracy on Dirty Data: 0.14800000000000002
+Configure Fit
+server round: 20
+[2024-07-19 07:51:14,417][flwr][DEBUG] - fit_round 20: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:53:45,041][flwr][DEBUG] - fit_round 20 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 6
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 9
+Local Clean Data Accuracy: 0.4783333333333333
+Local Backdoor accuracy: 0.8833333333333333
+Now, comb_C is [0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 9 and length of bad results is 0
+[2024-07-19 07:54:09,766][flwr][INFO] - fit progress: (20, 120.33689332008362, {'accuracy': 0.5391}, 3841.3790705869906)
+Configure Evaluate
+[2024-07-19 07:54:09,766][flwr][DEBUG] - evaluate_round 20: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:54:25,538][flwr][DEBUG] - evaluate_round 20 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.5857142857142857
+Federated Accuracy on Dirty Data: 0.5319999999999999
+Global Poisoning Accuracy on Dirty Data: 0.12200000000000001
+Configure Fit
+server round: 21
+[2024-07-19 07:54:25,541][flwr][DEBUG] - fit_round 21: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:56:53,804][flwr][DEBUG] - fit_round 21 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 5
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 10
+Local Clean Data Accuracy: 0.4699999999999999
+Local Backdoor accuracy: 0.844
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 10 and length of bad results is 0
+[2024-07-19 07:57:14,840][flwr][INFO] - fit progress: (21, 118.73444873094559, {'accuracy': 0.5425}, 4026.453469511005)
+Configure Evaluate
+[2024-07-19 07:57:14,841][flwr][DEBUG] - evaluate_round 21: strategy sampled 15 clients (out of 50)
+[2024-07-19 07:57:30,788][flwr][DEBUG] - evaluate_round 21 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.5670000000000001
+Federated Accuracy on Dirty Data: 0.49800000000000005
+Global Poisoning Accuracy on Dirty Data: 0.166
+Configure Fit
+server round: 22
+[2024-07-19 07:57:30,789][flwr][DEBUG] - fit_round 22: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:00:03,243][flwr][DEBUG] - fit_round 22 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 5
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 10
+Local Clean Data Accuracy: 0.48
+Local Backdoor accuracy: 0.8960000000000001
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 10 and length of bad results is 0
+[2024-07-19 08:00:24,408][flwr][INFO] - fit progress: (22, 117.5670993924141, {'accuracy': 0.5493}, 4216.02130285895)
+Configure Evaluate
+[2024-07-19 08:00:24,409][flwr][DEBUG] - evaluate_round 22: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:00:40,519][flwr][DEBUG] - evaluate_round 22 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6088888888888888
+Federated Accuracy on Dirty Data: 0.548
+Global Poisoning Accuracy on Dirty Data: 0.128
+Configure Fit
+server round: 23
+[2024-07-19 08:00:40,520][flwr][DEBUG] - fit_round 23: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:03:10,213][flwr][DEBUG] - fit_round 23 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 5
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 10
+Local Clean Data Accuracy: 0.5
+Local Backdoor accuracy: 0.876
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 10 and length of bad results is 0
+[2024-07-19 08:03:31,378][flwr][INFO] - fit progress: (23, 117.31035923957825, {'accuracy': 0.5565}, 4402.99138829601)
+Configure Evaluate
+[2024-07-19 08:03:31,379][flwr][DEBUG] - evaluate_round 23: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:03:47,421][flwr][DEBUG] - evaluate_round 23 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.5614285714285714
+Federated Accuracy on Dirty Data: 0.5442857142857143
+Global Poisoning Accuracy on Dirty Data: 0.09857142857142856
+Configure Fit
+server round: 24
+[2024-07-19 08:03:47,421][flwr][DEBUG] - fit_round 24: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:06:16,751][flwr][DEBUG] - fit_round 24 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 6
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 9
+Local Clean Data Accuracy: 0.4716666666666667
+Local Backdoor accuracy: 0.8866666666666666
+Now, comb_C is [0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 9 and length of bad results is 0
+[2024-07-19 08:06:40,249][flwr][INFO] - fit progress: (24, 118.15289896726608, {'accuracy': 0.5573}, 4591.862429264002)
+Configure Evaluate
+[2024-07-19 08:06:40,250][flwr][DEBUG] - evaluate_round 24: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:06:56,312][flwr][DEBUG] - evaluate_round 24 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.5680000000000001
+Federated Accuracy on Dirty Data: 0.5333333333333332
+Global Poisoning Accuracy on Dirty Data: 0.11888888888888892
+Configure Fit
+server round: 25
+[2024-07-19 08:06:56,313][flwr][DEBUG] - fit_round 25: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:09:28,852][flwr][DEBUG] - fit_round 25 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 8
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 7
+Local Clean Data Accuracy: 0.47500000000000003
+Local Backdoor accuracy: 0.8924999999999998
+Now, comb_C is [0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 7 and length of bad results is 0
+[2024-07-19 08:09:58,838][flwr][INFO] - fit progress: (25, 118.84697031974792, {'accuracy': 0.5538}, 4790.451088767964)
+Configure Evaluate
+[2024-07-19 08:09:58,838][flwr][DEBUG] - evaluate_round 25: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:10:15,189][flwr][DEBUG] - evaluate_round 25 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.5933333333333333
+Federated Accuracy on Dirty Data: 0.5675
+Global Poisoning Accuracy on Dirty Data: 0.11750000000000001
+Configure Fit
+server round: 26
+[2024-07-19 08:10:15,190][flwr][DEBUG] - fit_round 26: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:12:47,480][flwr][DEBUG] - fit_round 26 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 4
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 11
+Local Clean Data Accuracy: 0.5275
+Local Backdoor accuracy: 0.8775000000000001
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 11 and length of bad results is 0
+[2024-07-19 08:13:05,685][flwr][INFO] - fit progress: (26, 117.76959109306335, {'accuracy': 0.5618}, 4977.297742596944)
+Configure Evaluate
+[2024-07-19 08:13:05,685][flwr][DEBUG] - evaluate_round 26: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:13:21,790][flwr][DEBUG] - evaluate_round 26 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.595
+Federated Accuracy on Dirty Data: 0.516
+Global Poisoning Accuracy on Dirty Data: 0.128
+Configure Fit
+server round: 27
+[2024-07-19 08:13:21,790][flwr][DEBUG] - fit_round 27: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:15:45,315][flwr][DEBUG] - fit_round 27 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 2
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 13
+Local Clean Data Accuracy: 0.51
+Local Backdoor accuracy: 0.865
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 13 and length of bad results is 0
+[2024-07-19 08:15:57,452][flwr][INFO] - fit progress: (27, 116.18424928188324, {'accuracy': 0.5658}, 5149.064888997003)
+Configure Evaluate
+[2024-07-19 08:15:57,452][flwr][DEBUG] - evaluate_round 27: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:16:13,285][flwr][DEBUG] - evaluate_round 27 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.59
+Federated Accuracy on Dirty Data: 0.5660000000000001
+Global Poisoning Accuracy on Dirty Data: 0.11399999999999999
+Configure Fit
+server round: 28
+[2024-07-19 08:16:13,286][flwr][DEBUG] - fit_round 28: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:18:43,152][flwr][DEBUG] - fit_round 28 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 6
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 9
+Local Clean Data Accuracy: 0.48499999999999993
+Local Backdoor accuracy: 0.8733333333333334
+Now, comb_C is [0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 9 and length of bad results is 0
+[2024-07-19 08:19:08,016][flwr][INFO] - fit progress: (28, 118.04720121622086, {'accuracy': 0.5596}, 5339.628878470976)
+Configure Evaluate
+[2024-07-19 08:19:08,016][flwr][DEBUG] - evaluate_round 28: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:19:23,994][flwr][DEBUG] - evaluate_round 28 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.5714285714285715
+Federated Accuracy on Dirty Data: 0.5528571428571428
+Global Poisoning Accuracy on Dirty Data: 0.13285714285714284
+Configure Fit
+server round: 29
+[2024-07-19 08:19:23,995][flwr][DEBUG] - fit_round 29: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:21:51,127][flwr][DEBUG] - fit_round 29 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 3
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 12
+Local Clean Data Accuracy: 0.49333333333333335
+Local Backdoor accuracy: 0.89
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 12 and length of bad results is 0
+[2024-07-19 08:22:06,704][flwr][INFO] - fit progress: (29, 116.18390244245529, {'accuracy': 0.5659}, 5518.317393698962)
+Configure Evaluate
+[2024-07-19 08:22:06,705][flwr][DEBUG] - evaluate_round 29: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:22:22,500][flwr][DEBUG] - evaluate_round 29 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.5912499999999999
+Federated Accuracy on Dirty Data: 0.6
+Global Poisoning Accuracy on Dirty Data: 0.08499999999999999
+Configure Fit
+server round: 30
+[2024-07-19 08:22:22,501][flwr][DEBUG] - fit_round 30: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:24:52,283][flwr][DEBUG] - fit_round 30 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 7
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 8
+Local Clean Data Accuracy: 0.4928571428571429
+Local Backdoor accuracy: 0.8828571428571428
+Now, comb_C is [0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 8 and length of bad results is 0
+[2024-07-19 08:25:19,224][flwr][INFO] - fit progress: (30, 116.3571457862854, {'accuracy': 0.5665}, 5710.837063123006)
+Configure Evaluate
+[2024-07-19 08:25:19,224][flwr][DEBUG] - evaluate_round 30: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:25:35,016][flwr][DEBUG] - evaluate_round 30 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.5822222222222222
+Federated Accuracy on Dirty Data: 0.5539999999999999
+Global Poisoning Accuracy on Dirty Data: 0.124
+Configure Fit
+server round: 31
+[2024-07-19 08:25:35,016][flwr][DEBUG] - fit_round 31: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:28:03,008][flwr][DEBUG] - fit_round 31 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 5
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 10
+Local Clean Data Accuracy: 0.488
+Local Backdoor accuracy: 0.898
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 10 and length of bad results is 0
+[2024-07-19 08:28:23,799][flwr][INFO] - fit progress: (31, 116.71672117710114, {'accuracy': 0.5683}, 5895.411794051994)
+Configure Evaluate
+[2024-07-19 08:28:23,799][flwr][DEBUG] - evaluate_round 31: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:28:39,657][flwr][DEBUG] - evaluate_round 31 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6066666666666667
+Federated Accuracy on Dirty Data: 0.5842857142857144
+Global Poisoning Accuracy on Dirty Data: 0.1357142857142857
+Configure Fit
+server round: 32
+[2024-07-19 08:28:39,658][flwr][DEBUG] - fit_round 32: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:31:17,341][flwr][DEBUG] - fit_round 32 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 8
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 7
+Local Clean Data Accuracy: 0.5275000000000001
+Local Backdoor accuracy: 0.8849999999999999
+Now, comb_C is [0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 7 and length of bad results is 0
+[2024-07-19 08:31:47,459][flwr][INFO] - fit progress: (32, 115.8500308394432, {'accuracy': 0.5745}, 6099.071665731957)
+Configure Evaluate
+[2024-07-19 08:31:47,459][flwr][DEBUG] - evaluate_round 32: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:32:03,569][flwr][DEBUG] - evaluate_round 32 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.592
+Federated Accuracy on Dirty Data: 0.552
+Global Poisoning Accuracy on Dirty Data: 0.126
+Configure Fit
+server round: 33
+[2024-07-19 08:32:03,569][flwr][DEBUG] - fit_round 33: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:34:42,861][flwr][DEBUG] - fit_round 33 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 9
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 6
+Local Clean Data Accuracy: 0.48888888888888893
+Local Backdoor accuracy: 0.8888888888888888
+Now, comb_C is [0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 6 and length of bad results is 0
+[2024-07-19 08:35:15,624][flwr][INFO] - fit progress: (33, 110.85239845514297, {'accuracy': 0.5923}, 6307.236985310912)
+Configure Evaluate
+[2024-07-19 08:35:15,625][flwr][DEBUG] - evaluate_round 33: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:35:31,883][flwr][DEBUG] - evaluate_round 33 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.5977777777777779
+Federated Accuracy on Dirty Data: 0.5816666666666667
+Global Poisoning Accuracy on Dirty Data: 0.03666666666666667
+Configure Fit
+server round: 34
+[2024-07-19 08:35:31,884][flwr][DEBUG] - fit_round 34: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:37:59,136][flwr][DEBUG] - fit_round 34 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 4
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 11
+Local Clean Data Accuracy: 0.5325
+Local Backdoor accuracy: 0.9025
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 11 and length of bad results is 0
+[2024-07-19 08:38:16,932][flwr][INFO] - fit progress: (34, 115.81117260456085, {'accuracy': 0.5743}, 6488.544525463949)
+Configure Evaluate
+[2024-07-19 08:38:16,932][flwr][DEBUG] - evaluate_round 34: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:38:32,591][flwr][DEBUG] - evaluate_round 34 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.61125
+Federated Accuracy on Dirty Data: 0.572
+Global Poisoning Accuracy on Dirty Data: 0.12200000000000001
+Configure Fit
+server round: 35
+[2024-07-19 08:38:32,592][flwr][DEBUG] - fit_round 35: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:41:03,256][flwr][DEBUG] - fit_round 35 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 7
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 8
+Local Clean Data Accuracy: 0.5571428571428572
+Local Backdoor accuracy: 0.8914285714285715
+Now, comb_C is [0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 8 and length of bad results is 0
+[2024-07-19 08:41:30,237][flwr][INFO] - fit progress: (35, 113.3020087480545, {'accuracy': 0.5926}, 6681.84983761597)
+Configure Evaluate
+[2024-07-19 08:41:30,238][flwr][DEBUG] - evaluate_round 35: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:41:47,279][flwr][DEBUG] - evaluate_round 35 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.5900000000000001
+Federated Accuracy on Dirty Data: 0.5887499999999999
+Global Poisoning Accuracy on Dirty Data: 0.028750000000000005
+Configure Fit
+server round: 36
+[2024-07-19 08:41:47,280][flwr][DEBUG] - fit_round 36: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:44:14,645][flwr][DEBUG] - fit_round 36 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 4
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 11
+Local Clean Data Accuracy: 0.485
+Local Backdoor accuracy: 0.88
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 11 and length of bad results is 0
+[2024-07-19 08:44:32,193][flwr][INFO] - fit progress: (36, 118.15989124774933, {'accuracy': 0.5751}, 6863.805592605961)
+Configure Evaluate
+[2024-07-19 08:44:32,193][flwr][DEBUG] - evaluate_round 36: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:44:47,597][flwr][DEBUG] - evaluate_round 36 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.613
+Federated Accuracy on Dirty Data: 0.5475
+Global Poisoning Accuracy on Dirty Data: 0.1375
+Configure Fit
+server round: 37
+[2024-07-19 08:44:47,598][flwr][DEBUG] - fit_round 37: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:47:18,770][flwr][DEBUG] - fit_round 37 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 6
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 9
+Local Clean Data Accuracy: 0.49499999999999994
+Local Backdoor accuracy: 0.8750000000000001
+Now, comb_C is [0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 9 and length of bad results is 0
+[2024-07-19 08:47:42,890][flwr][INFO] - fit progress: (37, 117.04125547409058, {'accuracy': 0.5767}, 7054.502726421924)
+Configure Evaluate
+[2024-07-19 08:47:42,890][flwr][DEBUG] - evaluate_round 37: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:47:59,366][flwr][DEBUG] - evaluate_round 37 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.62
+Federated Accuracy on Dirty Data: 0.5625
+Global Poisoning Accuracy on Dirty Data: 0.11000000000000001
+Configure Fit
+server round: 38
+[2024-07-19 08:47:59,367][flwr][DEBUG] - fit_round 38: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:50:30,537][flwr][DEBUG] - fit_round 38 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 7
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 8
+Local Clean Data Accuracy: 0.5171428571428571
+Local Backdoor accuracy: 0.8871428571428571
+Now, comb_C is [0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 8 and length of bad results is 0
+[2024-07-19 08:50:57,238][flwr][INFO] - fit progress: (38, 112.01297801733017, {'accuracy': 0.5932}, 7248.850826147944)
+Configure Evaluate
+[2024-07-19 08:50:57,238][flwr][DEBUG] - evaluate_round 38: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:51:13,227][flwr][DEBUG] - evaluate_round 38 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.5877777777777777
+Federated Accuracy on Dirty Data: 0.5860000000000001
+Global Poisoning Accuracy on Dirty Data: 0.03
+Configure Fit
+server round: 39
+[2024-07-19 08:51:13,227][flwr][DEBUG] - fit_round 39: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:53:47,280][flwr][DEBUG] - fit_round 39 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 6
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 9
+Local Clean Data Accuracy: 0.5416666666666666
+Local Backdoor accuracy: 0.8816666666666667
+Now, comb_C is [0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 9 and length of bad results is 0
+[2024-07-19 08:54:11,498][flwr][INFO] - fit progress: (39, 117.65559667348862, {'accuracy': 0.5785}, 7443.111230145907)
+Configure Evaluate
+[2024-07-19 08:54:11,499][flwr][DEBUG] - evaluate_round 39: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:54:27,796][flwr][DEBUG] - evaluate_round 39 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.58125
+Federated Accuracy on Dirty Data: 0.6033333333333334
+Global Poisoning Accuracy on Dirty Data: 0.10833333333333335
+Configure Fit
+server round: 40
+[2024-07-19 08:54:27,797][flwr][DEBUG] - fit_round 40: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:57:00,498][flwr][DEBUG] - fit_round 40 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 8
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 7
+Local Clean Data Accuracy: 0.52625
+Local Backdoor accuracy: 0.88375
+Now, comb_C is [0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 7 and length of bad results is 0
+[2024-07-19 08:57:30,752][flwr][INFO] - fit progress: (40, 114.37296271324158, {'accuracy': 0.5939}, 7642.364677907899)
+Configure Evaluate
+[2024-07-19 08:57:30,752][flwr][DEBUG] - evaluate_round 40: strategy sampled 15 clients (out of 50)
+[2024-07-19 08:57:46,873][flwr][DEBUG] - evaluate_round 40 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.59125
+Federated Accuracy on Dirty Data: 0.615
+Global Poisoning Accuracy on Dirty Data: 0.0325
+Configure Fit
+server round: 41
+[2024-07-19 08:57:46,874][flwr][DEBUG] - fit_round 41: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:00:23,848][flwr][DEBUG] - fit_round 41 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0']
+Number of Evil Clients: 10
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 5
+Local Clean Data Accuracy: 0.506
+Local Backdoor accuracy: 0.873
+Now, comb_C is [0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 5 and length of bad results is 0
+[2024-07-19 09:01:00,054][flwr][INFO] - fit progress: (41, 119.19654679298401, {'accuracy': 0.5784}, 7851.666474760976)
+Configure Evaluate
+[2024-07-19 09:01:00,054][flwr][DEBUG] - evaluate_round 41: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:01:16,358][flwr][DEBUG] - evaluate_round 41 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.5942857142857142
+Federated Accuracy on Dirty Data: 0.5683333333333334
+Global Poisoning Accuracy on Dirty Data: 0.12500000000000003
+Configure Fit
+server round: 42
+[2024-07-19 09:01:16,359][flwr][DEBUG] - fit_round 42: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:03:50,065][flwr][DEBUG] - fit_round 42 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 6
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 9
+Local Clean Data Accuracy: 0.5183333333333334
+Local Backdoor accuracy: 0.8816666666666668
+Now, comb_C is [0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 9 and length of bad results is 0
+[2024-07-19 09:04:14,137][flwr][INFO] - fit progress: (42, 112.15867429971695, {'accuracy': 0.5967}, 8045.74966461095)
+Configure Evaluate
+[2024-07-19 09:04:14,137][flwr][DEBUG] - evaluate_round 42: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:04:30,823][flwr][DEBUG] - evaluate_round 42 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6133333333333334
+Federated Accuracy on Dirty Data: 0.60125
+Global Poisoning Accuracy on Dirty Data: 0.034999999999999996
+Configure Fit
+server round: 43
+[2024-07-19 09:04:30,823][flwr][DEBUG] - fit_round 43: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:06:59,257][flwr][DEBUG] - fit_round 43 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 5
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 10
+Local Clean Data Accuracy: 0.528
+Local Backdoor accuracy: 0.8700000000000001
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 10 and length of bad results is 0
+[2024-07-19 09:07:20,968][flwr][INFO] - fit progress: (43, 114.67784190177917, {'accuracy': 0.5974}, 8232.581130258972)
+Configure Evaluate
+[2024-07-19 09:07:20,969][flwr][DEBUG] - evaluate_round 43: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:07:37,473][flwr][DEBUG] - evaluate_round 43 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.62
+Federated Accuracy on Dirty Data: 0.6040000000000001
+Global Poisoning Accuracy on Dirty Data: 0.038000000000000006
+Configure Fit
+server round: 44
+[2024-07-19 09:07:37,476][flwr][DEBUG] - fit_round 44: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:10:10,541][flwr][DEBUG] - fit_round 44 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 6
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 9
+Local Clean Data Accuracy: 0.565
+Local Backdoor accuracy: 0.8766666666666666
+Now, comb_C is [0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 9 and length of bad results is 0
+[2024-07-19 09:10:35,246][flwr][INFO] - fit progress: (44, 120.91246747970581, {'accuracy': 0.5787}, 8426.858884013956)
+Configure Evaluate
+[2024-07-19 09:10:35,247][flwr][DEBUG] - evaluate_round 44: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:10:51,562][flwr][DEBUG] - evaluate_round 44 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.60875
+Federated Accuracy on Dirty Data: 0.5816666666666667
+Global Poisoning Accuracy on Dirty Data: 0.11
+Configure Fit
+server round: 45
+[2024-07-19 09:10:51,563][flwr][DEBUG] - fit_round 45: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:13:18,313][flwr][DEBUG] - fit_round 45 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 4
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 11
+Local Clean Data Accuracy: 0.5275000000000001
+Local Backdoor accuracy: 0.885
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 11 and length of bad results is 0
+[2024-07-19 09:13:36,463][flwr][INFO] - fit progress: (45, 114.76750892400742, {'accuracy': 0.6024}, 8608.07640507794)
+Configure Evaluate
+[2024-07-19 09:13:36,464][flwr][DEBUG] - evaluate_round 45: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:13:52,667][flwr][DEBUG] - evaluate_round 45 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6133333333333333
+Federated Accuracy on Dirty Data: 0.5887499999999999
+Global Poisoning Accuracy on Dirty Data: 0.028750000000000005
+Configure Fit
+server round: 46
+[2024-07-19 09:13:52,668][flwr][DEBUG] - fit_round 46: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:16:23,379][flwr][DEBUG] - fit_round 46 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 7
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 8
+Local Clean Data Accuracy: 0.5114285714285715
+Local Backdoor accuracy: 0.8728571428571429
+Now, comb_C is [0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 8 and length of bad results is 0
+[2024-07-19 09:16:50,601][flwr][INFO] - fit progress: (46, 121.08363962173462, {'accuracy': 0.5816}, 8802.213738997933)
+Configure Evaluate
+[2024-07-19 09:16:50,601][flwr][DEBUG] - evaluate_round 46: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:17:06,609][flwr][DEBUG] - evaluate_round 46 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.61
+Federated Accuracy on Dirty Data: 0.5400000000000001
+Global Poisoning Accuracy on Dirty Data: 0.11499999999999999
+Configure Fit
+server round: 47
+[2024-07-19 09:17:06,609][flwr][DEBUG] - fit_round 47: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:19:35,250][flwr][DEBUG] - fit_round 47 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 5
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 10
+Local Clean Data Accuracy: 0.592
+Local Backdoor accuracy: 0.89
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 10 and length of bad results is 0
+[2024-07-19 09:19:56,864][flwr][INFO] - fit progress: (47, 113.53281956911087, {'accuracy': 0.6009}, 8988.477190949954)
+Configure Evaluate
+[2024-07-19 09:19:56,865][flwr][DEBUG] - evaluate_round 47: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:20:13,503][flwr][DEBUG] - evaluate_round 47 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6125
+Federated Accuracy on Dirty Data: 0.5871428571428572
+Global Poisoning Accuracy on Dirty Data: 0.02
+Configure Fit
+server round: 48
+[2024-07-19 09:20:13,504][flwr][DEBUG] - fit_round 48: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:22:47,323][flwr][DEBUG] - fit_round 48 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 6
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 9
+Local Clean Data Accuracy: 0.5333333333333333
+Local Backdoor accuracy: 0.8900000000000001
+Now, comb_C is [0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 9 and length of bad results is 0
+[2024-07-19 09:23:11,743][flwr][INFO] - fit progress: (48, 115.79382932186127, {'accuracy': 0.6046}, 9183.356499206973)
+Configure Evaluate
+[2024-07-19 09:23:11,744][flwr][DEBUG] - evaluate_round 48: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:23:27,832][flwr][DEBUG] - evaluate_round 48 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.605
+Federated Accuracy on Dirty Data: 0.6024999999999999
+Global Poisoning Accuracy on Dirty Data: 0.015000000000000003
+Configure Fit
+server round: 49
+[2024-07-19 09:23:27,833][flwr][DEBUG] - fit_round 49: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:25:56,193][flwr][DEBUG] - fit_round 49 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 5
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 10
+Local Clean Data Accuracy: 0.54
+Local Backdoor accuracy: 0.868
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 10 and length of bad results is 0
+[2024-07-19 09:26:17,451][flwr][INFO] - fit progress: (49, 119.48385101556778, {'accuracy': 0.6032}, 9369.063704292988)
+Configure Evaluate
+[2024-07-19 09:26:17,451][flwr][DEBUG] - evaluate_round 49: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:26:34,082][flwr][DEBUG] - evaluate_round 49 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.595
+Federated Accuracy on Dirty Data: 0.5922222222222222
+Global Poisoning Accuracy on Dirty Data: 0.03888888888888888
+Configure Fit
+server round: 50
+[2024-07-19 09:26:34,083][flwr][DEBUG] - fit_round 50: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:28:59,958][flwr][DEBUG] - fit_round 50 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 3
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 12
+Local Clean Data Accuracy: 0.5066666666666667
+Local Backdoor accuracy: 0.8633333333333333
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 12 and length of bad results is 0
+[2024-07-19 09:29:15,362][flwr][INFO] - fit progress: (50, 118.35627007484436, {'accuracy': 0.6025}, 9546.974901722977)
+Configure Evaluate
+[2024-07-19 09:29:15,362][flwr][DEBUG] - evaluate_round 50: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:29:32,271][flwr][DEBUG] - evaluate_round 50 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.605
+Federated Accuracy on Dirty Data: 0.5716666666666667
+Global Poisoning Accuracy on Dirty Data: 0.02
+Configure Fit
+server round: 51
+[2024-07-19 09:29:32,272][flwr][DEBUG] - fit_round 51: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:32:03,754][flwr][DEBUG] - fit_round 51 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 7
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 8
+Local Clean Data Accuracy: 0.5399999999999999
+Local Backdoor accuracy: 0.8628571428571429
+Now, comb_C is [0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 8 and length of bad results is 0
+[2024-07-19 09:32:31,123][flwr][INFO] - fit progress: (51, 121.61490482091904, {'accuracy': 0.5986}, 9742.736118320958)
+Configure Evaluate
+[2024-07-19 09:32:31,123][flwr][DEBUG] - evaluate_round 51: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:32:48,126][flwr][DEBUG] - evaluate_round 51 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6060000000000001
+Federated Accuracy on Dirty Data: 0.602
+Global Poisoning Accuracy on Dirty Data: 0.034
+Configure Fit
+server round: 52
+[2024-07-19 09:32:48,127][flwr][DEBUG] - fit_round 52: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:35:22,415][flwr][DEBUG] - fit_round 52 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 5
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 10
+Local Clean Data Accuracy: 0.56
+Local Backdoor accuracy: 0.9019999999999999
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 10 and length of bad results is 0
+[2024-07-19 09:35:43,043][flwr][INFO] - fit progress: (52, 127.14710992574692, {'accuracy': 0.5784}, 9934.655660439981)
+Configure Evaluate
+[2024-07-19 09:35:43,043][flwr][DEBUG] - evaluate_round 52: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:35:58,723][flwr][DEBUG] - evaluate_round 52 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.595
+Federated Accuracy on Dirty Data: 0.5877777777777777
+Global Poisoning Accuracy on Dirty Data: 0.11888888888888888
+Configure Fit
+server round: 53
+[2024-07-19 09:35:58,723][flwr][DEBUG] - fit_round 53: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:38:27,656][flwr][DEBUG] - fit_round 53 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 6
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 9
+Local Clean Data Accuracy: 0.49
+Local Backdoor accuracy: 0.895
+Now, comb_C is [0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 9 and length of bad results is 0
+[2024-07-19 09:38:51,571][flwr][INFO] - fit progress: (53, 117.94400256872177, {'accuracy': 0.6017}, 10123.18424538197)
+Configure Evaluate
+[2024-07-19 09:38:51,572][flwr][DEBUG] - evaluate_round 53: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:39:07,996][flwr][DEBUG] - evaluate_round 53 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6016666666666667
+Federated Accuracy on Dirty Data: 0.6199999999999999
+Global Poisoning Accuracy on Dirty Data: 0.03875
+Configure Fit
+server round: 54
+[2024-07-19 09:39:07,997][flwr][DEBUG] - fit_round 54: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:41:37,499][flwr][DEBUG] - fit_round 54 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 5
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 10
+Local Clean Data Accuracy: 0.516
+Local Backdoor accuracy: 0.906
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 10 and length of bad results is 0
+[2024-07-19 09:41:58,894][flwr][INFO] - fit progress: (54, 116.19418025016785, {'accuracy': 0.6076}, 10310.506670663948)
+Configure Evaluate
+[2024-07-19 09:41:58,894][flwr][DEBUG] - evaluate_round 54: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:42:15,072][flwr][DEBUG] - evaluate_round 54 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6227272727272727
+Federated Accuracy on Dirty Data: 0.595
+Global Poisoning Accuracy on Dirty Data: 0.015000000000000003
+Configure Fit
+server round: 55
+[2024-07-19 09:42:15,073][flwr][DEBUG] - fit_round 55: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:44:41,191][flwr][DEBUG] - fit_round 55 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 4
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 11
+Local Clean Data Accuracy: 0.5125
+Local Backdoor accuracy: 0.895
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 11 and length of bad results is 0
+[2024-07-19 09:44:59,712][flwr][INFO] - fit progress: (55, 119.39354932308197, {'accuracy': 0.6076}, 10491.325056542992)
+Configure Evaluate
+[2024-07-19 09:44:59,712][flwr][DEBUG] - evaluate_round 55: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:45:16,865][flwr][DEBUG] - evaluate_round 55 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6449999999999999
+Federated Accuracy on Dirty Data: 0.605
+Global Poisoning Accuracy on Dirty Data: 0.05
+Configure Fit
+server round: 56
+[2024-07-19 09:45:16,866][flwr][DEBUG] - fit_round 56: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:47:54,328][flwr][DEBUG] - fit_round 56 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 8
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 7
+Local Clean Data Accuracy: 0.535
+Local Backdoor accuracy: 0.885
+Now, comb_C is [0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 7 and length of bad results is 0
+[2024-07-19 09:48:24,418][flwr][INFO] - fit progress: (56, 121.22765934467316, {'accuracy': 0.6046}, 10696.031232052948)
+Configure Evaluate
+[2024-07-19 09:48:24,419][flwr][DEBUG] - evaluate_round 56: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:48:41,540][flwr][DEBUG] - evaluate_round 56 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6066666666666667
+Federated Accuracy on Dirty Data: 0.5860000000000001
+Global Poisoning Accuracy on Dirty Data: 0.036000000000000004
+Configure Fit
+server round: 57
+[2024-07-19 09:48:41,541][flwr][DEBUG] - fit_round 57: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:51:10,848][flwr][DEBUG] - fit_round 57 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 5
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 10
+Local Clean Data Accuracy: 0.51
+Local Backdoor accuracy: 0.8779999999999999
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 10 and length of bad results is 0
+[2024-07-19 09:51:32,320][flwr][INFO] - fit progress: (57, 129.52067017555237, {'accuracy': 0.5813}, 10883.933017735952)
+Configure Evaluate
+[2024-07-19 09:51:32,321][flwr][DEBUG] - evaluate_round 57: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:51:48,229][flwr][DEBUG] - evaluate_round 57 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.634
+Federated Accuracy on Dirty Data: 0.5822222222222223
+Global Poisoning Accuracy on Dirty Data: 0.1088888888888889
+Configure Fit
+server round: 58
+[2024-07-19 09:51:48,229][flwr][DEBUG] - fit_round 58: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:54:18,430][flwr][DEBUG] - fit_round 58 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 6
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 9
+Local Clean Data Accuracy: 0.5283333333333334
+Local Backdoor accuracy: 0.8866666666666667
+Now, comb_C is [0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 9 and length of bad results is 0
+[2024-07-19 09:54:42,414][flwr][INFO] - fit progress: (58, 121.1103595495224, {'accuracy': 0.6014}, 11074.027104476001)
+Configure Evaluate
+[2024-07-19 09:54:42,415][flwr][DEBUG] - evaluate_round 58: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:54:58,638][flwr][DEBUG] - evaluate_round 58 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6357142857142857
+Federated Accuracy on Dirty Data: 0.6071428571428571
+Global Poisoning Accuracy on Dirty Data: 0.02142857142857143
+Configure Fit
+server round: 59
+[2024-07-19 09:54:58,639][flwr][DEBUG] - fit_round 59: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:57:32,105][flwr][DEBUG] - fit_round 59 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 6
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 9
+Local Clean Data Accuracy: 0.51
+Local Backdoor accuracy: 0.875
+Now, comb_C is [0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 9 and length of bad results is 0
+[2024-07-19 09:57:56,940][flwr][INFO] - fit progress: (59, 117.99282723665237, {'accuracy': 0.6076}, 11268.552465980989)
+Configure Evaluate
+[2024-07-19 09:57:56,941][flwr][DEBUG] - evaluate_round 59: strategy sampled 15 clients (out of 50)
+[2024-07-19 09:58:14,022][flwr][DEBUG] - evaluate_round 59 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6125
+Federated Accuracy on Dirty Data: 0.648
+Global Poisoning Accuracy on Dirty Data: 0.022000000000000002
+Configure Fit
+server round: 60
+[2024-07-19 09:58:14,023][flwr][DEBUG] - fit_round 60: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:00:41,577][flwr][DEBUG] - fit_round 60 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 4
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 11
+Local Clean Data Accuracy: 0.5025
+Local Backdoor accuracy: 0.865
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 11 and length of bad results is 0
+[2024-07-19 10:01:00,067][flwr][INFO] - fit progress: (60, 121.5876197218895, {'accuracy': 0.6077}, 11451.679871883942)
+Configure Evaluate
+[2024-07-19 10:01:00,067][flwr][DEBUG] - evaluate_round 60: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:01:17,072][flwr][DEBUG] - evaluate_round 60 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6212500000000001
+Federated Accuracy on Dirty Data: 0.62
+Global Poisoning Accuracy on Dirty Data: 0.02333333333333333
+Configure Fit
+server round: 61
+[2024-07-19 10:01:17,072][flwr][DEBUG] - fit_round 61: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:03:44,494][flwr][DEBUG] - fit_round 61 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 4
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 11
+Local Clean Data Accuracy: 0.5025
+Local Backdoor accuracy: 0.8724999999999999
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 11 and length of bad results is 0
+[2024-07-19 10:04:03,047][flwr][INFO] - fit progress: (61, 123.08102190494537, {'accuracy': 0.6103}, 11634.659376240917)
+Configure Evaluate
+[2024-07-19 10:04:03,048][flwr][DEBUG] - evaluate_round 61: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:04:19,356][flwr][DEBUG] - evaluate_round 61 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6157142857142857
+Federated Accuracy on Dirty Data: 0.5828571428571429
+Global Poisoning Accuracy on Dirty Data: 0.03428571428571429
+Configure Fit
+server round: 62
+[2024-07-19 10:04:19,356][flwr][DEBUG] - fit_round 62: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:06:48,172][flwr][DEBUG] - fit_round 62 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 5
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 10
+Local Clean Data Accuracy: 0.5479999999999999
+Local Backdoor accuracy: 0.8880000000000001
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 10 and length of bad results is 0
+[2024-07-19 10:07:09,333][flwr][INFO] - fit progress: (62, 124.20847016572952, {'accuracy': 0.6077}, 11820.946128606913)
+Configure Evaluate
+[2024-07-19 10:07:09,334][flwr][DEBUG] - evaluate_round 62: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:07:26,216][flwr][DEBUG] - evaluate_round 62 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.62375
+Federated Accuracy on Dirty Data: 0.6183333333333334
+Global Poisoning Accuracy on Dirty Data: 0.030000000000000002
+Configure Fit
+server round: 63
+[2024-07-19 10:07:26,216][flwr][DEBUG] - fit_round 63: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:09:52,858][flwr][DEBUG] - fit_round 63 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 4
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 11
+Local Clean Data Accuracy: 0.49250000000000005
+Local Backdoor accuracy: 0.8875
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 11 and length of bad results is 0
+[2024-07-19 10:10:11,402][flwr][INFO] - fit progress: (63, 124.15241396427155, {'accuracy': 0.6077}, 12003.01476365293)
+Configure Evaluate
+[2024-07-19 10:10:11,403][flwr][DEBUG] - evaluate_round 63: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:10:28,490][flwr][DEBUG] - evaluate_round 63 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.635
+Federated Accuracy on Dirty Data: 0.60375
+Global Poisoning Accuracy on Dirty Data: 0.03
+Configure Fit
+server round: 64
+[2024-07-19 10:10:28,491][flwr][DEBUG] - fit_round 64: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:12:59,587][flwr][DEBUG] - fit_round 64 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 7
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 8
+Local Clean Data Accuracy: 0.51
+Local Backdoor accuracy: 0.8871428571428572
+Now, comb_C is [0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 8 and length of bad results is 0
+[2024-07-19 10:13:26,730][flwr][INFO] - fit progress: (64, 127.19129687547684, {'accuracy': 0.6018}, 12198.343399100006)
+Configure Evaluate
+[2024-07-19 10:13:26,731][flwr][DEBUG] - evaluate_round 64: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:13:43,578][flwr][DEBUG] - evaluate_round 64 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.642
+Federated Accuracy on Dirty Data: 0.62
+Global Poisoning Accuracy on Dirty Data: 0.035555555555555556
+Configure Fit
+server round: 65
+[2024-07-19 10:13:43,579][flwr][DEBUG] - fit_round 65: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:16:12,899][flwr][DEBUG] - fit_round 65 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 6
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 9
+Local Clean Data Accuracy: 0.5533333333333333
+Local Backdoor accuracy: 0.8933333333333332
+Now, comb_C is [0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 9 and length of bad results is 0
+[2024-07-19 10:16:37,387][flwr][INFO] - fit progress: (65, 125.64404726028442, {'accuracy': 0.6097}, 12388.99960739899)
+Configure Evaluate
+[2024-07-19 10:16:37,387][flwr][DEBUG] - evaluate_round 65: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:16:54,333][flwr][DEBUG] - evaluate_round 65 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.615
+Federated Accuracy on Dirty Data: 0.59
+Global Poisoning Accuracy on Dirty Data: 0.035
+Configure Fit
+server round: 66
+[2024-07-19 10:16:54,334][flwr][DEBUG] - fit_round 66: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:19:21,926][flwr][DEBUG] - fit_round 66 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 5
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 10
+Local Clean Data Accuracy: 0.5619999999999999
+Local Backdoor accuracy: 0.884
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 10 and length of bad results is 0
+[2024-07-19 10:19:43,846][flwr][INFO] - fit progress: (66, 125.55089443922043, {'accuracy': 0.6099}, 12575.458477923996)
+Configure Evaluate
+[2024-07-19 10:19:43,846][flwr][DEBUG] - evaluate_round 66: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:20:00,515][flwr][DEBUG] - evaluate_round 66 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6322222222222222
+Federated Accuracy on Dirty Data: 0.6
+Global Poisoning Accuracy on Dirty Data: 0.034
+Configure Fit
+server round: 67
+[2024-07-19 10:20:00,515][flwr][DEBUG] - fit_round 67: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:22:29,088][flwr][DEBUG] - fit_round 67 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 5
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 10
+Local Clean Data Accuracy: 0.488
+Local Backdoor accuracy: 0.9
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 10 and length of bad results is 0
+[2024-07-19 10:22:50,453][flwr][INFO] - fit progress: (67, 126.91377830505371, {'accuracy': 0.6075}, 12762.06610297598)
+Configure Evaluate
+[2024-07-19 10:22:50,453][flwr][DEBUG] - evaluate_round 67: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:23:06,947][flwr][DEBUG] - evaluate_round 67 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6222222222222222
+Federated Accuracy on Dirty Data: 0.6183333333333334
+Global Poisoning Accuracy on Dirty Data: 0.043333333333333335
+Configure Fit
+server round: 68
+[2024-07-19 10:23:06,949][flwr][DEBUG] - fit_round 68: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:25:42,727][flwr][DEBUG] - fit_round 68 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 7
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 8
+Local Clean Data Accuracy: 0.5285714285714286
+Local Backdoor accuracy: 0.88
+Now, comb_C is [0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 8 and length of bad results is 0
+[2024-07-19 10:26:10,239][flwr][INFO] - fit progress: (68, 128.63807880878448, {'accuracy': 0.6083}, 12961.852340108948)
+Configure Evaluate
+[2024-07-19 10:26:10,240][flwr][DEBUG] - evaluate_round 68: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:26:26,679][flwr][DEBUG] - evaluate_round 68 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.593
+Federated Accuracy on Dirty Data: 0.612
+Global Poisoning Accuracy on Dirty Data: 0.041999999999999996
+Configure Fit
+server round: 69
+[2024-07-19 10:26:26,679][flwr][DEBUG] - fit_round 69: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:28:57,522][flwr][DEBUG] - fit_round 69 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 6
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 9
+Local Clean Data Accuracy: 0.5083333333333333
+Local Backdoor accuracy: 0.8616666666666667
+Now, comb_C is [0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 9 and length of bad results is 0
+[2024-07-19 10:29:21,404][flwr][INFO] - fit progress: (69, 131.34175026416779, {'accuracy': 0.5864}, 13153.0174950629)
+Configure Evaluate
+[2024-07-19 10:29:21,405][flwr][DEBUG] - evaluate_round 69: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:29:37,192][flwr][DEBUG] - evaluate_round 69 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.612
+Federated Accuracy on Dirty Data: 0.585
+Global Poisoning Accuracy on Dirty Data: 0.113
+Configure Fit
+server round: 70
+[2024-07-19 10:29:37,193][flwr][DEBUG] - fit_round 70: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:32:06,740][flwr][DEBUG] - fit_round 70 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 6
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 9
+Local Clean Data Accuracy: 0.5433333333333333
+Local Backdoor accuracy: 0.8916666666666666
+Now, comb_C is [0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 9 and length of bad results is 0
+[2024-07-19 10:32:30,615][flwr][INFO] - fit progress: (70, 122.11898159980774, {'accuracy': 0.61}, 13342.227566510905)
+Configure Evaluate
+[2024-07-19 10:32:30,615][flwr][DEBUG] - evaluate_round 70: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:32:47,472][flwr][DEBUG] - evaluate_round 70 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.642
+Federated Accuracy on Dirty Data: 0.6044444444444445
+Global Poisoning Accuracy on Dirty Data: 0.024444444444444446
+Configure Fit
+server round: 71
+[2024-07-19 10:32:47,474][flwr][DEBUG] - fit_round 71: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:35:21,464][flwr][DEBUG] - fit_round 71 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 7
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 8
+Local Clean Data Accuracy: 0.5214285714285715
+Local Backdoor accuracy: 0.8585714285714285
+Now, comb_C is [0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 8 and length of bad results is 0
+[2024-07-19 10:35:48,769][flwr][INFO] - fit progress: (71, 125.314284324646, {'accuracy': 0.606}, 13540.38188315893)
+Configure Evaluate
+[2024-07-19 10:35:48,770][flwr][DEBUG] - evaluate_round 71: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:36:05,819][flwr][DEBUG] - evaluate_round 71 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6633333333333333
+Federated Accuracy on Dirty Data: 0.61
+Global Poisoning Accuracy on Dirty Data: 0.036000000000000004
+Configure Fit
+server round: 72
+[2024-07-19 10:36:05,819][flwr][DEBUG] - fit_round 72: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:38:35,542][flwr][DEBUG] - fit_round 72 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 5
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 10
+Local Clean Data Accuracy: 0.506
+Local Backdoor accuracy: 0.8779999999999999
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 10 and length of bad results is 0
+[2024-07-19 10:38:57,450][flwr][INFO] - fit progress: (72, 124.28610932826996, {'accuracy': 0.6093}, 13729.062536997953)
+Configure Evaluate
+[2024-07-19 10:38:57,450][flwr][DEBUG] - evaluate_round 72: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:39:14,141][flwr][DEBUG] - evaluate_round 72 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.5962500000000001
+Federated Accuracy on Dirty Data: 0.5883333333333334
+Global Poisoning Accuracy on Dirty Data: 0.029999999999999995
+Configure Fit
+server round: 73
+[2024-07-19 10:39:14,142][flwr][DEBUG] - fit_round 73: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:41:50,418][flwr][DEBUG] - fit_round 73 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 9
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 6
+Local Clean Data Accuracy: 0.5355555555555556
+Local Backdoor accuracy: 0.8888888888888888
+Now, comb_C is [0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 6 and length of bad results is 0
+[2024-07-19 10:42:23,444][flwr][INFO] - fit progress: (73, 130.15474569797516, {'accuracy': 0.6018}, 13935.057200831012)
+Configure Evaluate
+[2024-07-19 10:42:23,445][flwr][DEBUG] - evaluate_round 73: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:42:40,390][flwr][DEBUG] - evaluate_round 73 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6519999999999999
+Federated Accuracy on Dirty Data: 0.5579999999999999
+Global Poisoning Accuracy on Dirty Data: 0.042
+Configure Fit
+server round: 74
+[2024-07-19 10:42:40,391][flwr][DEBUG] - fit_round 74: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:45:20,585][flwr][DEBUG] - fit_round 74 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 9
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 6
+Local Clean Data Accuracy: 0.5177777777777778
+Local Backdoor accuracy: 0.8866666666666666
+Now, comb_C is [0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 6 and length of bad results is 0
+[2024-07-19 10:45:54,489][flwr][INFO] - fit progress: (74, 131.46712625026703, {'accuracy': 0.5976}, 14146.102081586956)
+Configure Evaluate
+[2024-07-19 10:45:54,490][flwr][DEBUG] - evaluate_round 74: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:46:10,700][flwr][DEBUG] - evaluate_round 74 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.61
+Federated Accuracy on Dirty Data: 0.5824999999999999
+Global Poisoning Accuracy on Dirty Data: 0.02
+Configure Fit
+server round: 75
+[2024-07-19 10:46:10,700][flwr][DEBUG] - fit_round 75: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:48:43,786][flwr][DEBUG] - fit_round 75 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 6
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 9
+Local Clean Data Accuracy: 0.5066666666666667
+Local Backdoor accuracy: 0.88
+Now, comb_C is [0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 9 and length of bad results is 0
+[2024-07-19 10:49:08,230][flwr][INFO] - fit progress: (75, 126.72522270679474, {'accuracy': 0.6088}, 14339.843189687934)
+Configure Evaluate
+[2024-07-19 10:49:08,231][flwr][DEBUG] - evaluate_round 75: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:49:24,664][flwr][DEBUG] - evaluate_round 75 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.634
+Federated Accuracy on Dirty Data: 0.5800000000000001
+Global Poisoning Accuracy on Dirty Data: 0.034999999999999996
+Configure Fit
+server round: 76
+[2024-07-19 10:49:24,665][flwr][DEBUG] - fit_round 76: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:51:54,766][flwr][DEBUG] - fit_round 76 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 6
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 9
+Local Clean Data Accuracy: 0.5533333333333333
+Local Backdoor accuracy: 0.8833333333333334
+Now, comb_C is [0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 9 and length of bad results is 0
+[2024-07-19 10:52:18,810][flwr][INFO] - fit progress: (76, 130.11896443367004, {'accuracy': 0.6078}, 14530.423164342996)
+Configure Evaluate
+[2024-07-19 10:52:18,811][flwr][DEBUG] - evaluate_round 76: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:52:35,083][flwr][DEBUG] - evaluate_round 76 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6233333333333333
+Federated Accuracy on Dirty Data: 0.596
+Global Poisoning Accuracy on Dirty Data: 0.027999999999999997
+Configure Fit
+server round: 77
+[2024-07-19 10:52:35,083][flwr][DEBUG] - fit_round 77: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:55:11,216][flwr][DEBUG] - fit_round 77 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 7
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 8
+Local Clean Data Accuracy: 0.5599999999999999
+Local Backdoor accuracy: 0.8928571428571429
+Now, comb_C is [0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 8 and length of bad results is 0
+[2024-07-19 10:55:38,902][flwr][INFO] - fit progress: (77, 129.87882441282272, {'accuracy': 0.6093}, 14730.515393327922)
+Configure Evaluate
+[2024-07-19 10:55:38,903][flwr][DEBUG] - evaluate_round 77: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:55:55,385][flwr][DEBUG] - evaluate_round 77 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6074999999999999
+Federated Accuracy on Dirty Data: 0.568
+Global Poisoning Accuracy on Dirty Data: 0.038000000000000006
+Configure Fit
+server round: 78
+[2024-07-19 10:55:55,386][flwr][DEBUG] - fit_round 78: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:58:24,905][flwr][DEBUG] - fit_round 78 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 7
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 8
+Local Clean Data Accuracy: 0.4985714285714286
+Local Backdoor accuracy: 0.8857142857142856
+Now, comb_C is [0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 8 and length of bad results is 0
+[2024-07-19 10:58:50,908][flwr][INFO] - fit progress: (78, 134.64316129684448, {'accuracy': 0.6048}, 14922.521474950947)
+Configure Evaluate
+[2024-07-19 10:58:50,909][flwr][DEBUG] - evaluate_round 78: strategy sampled 15 clients (out of 50)
+[2024-07-19 10:59:06,985][flwr][DEBUG] - evaluate_round 78 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6222222222222223
+Federated Accuracy on Dirty Data: 0.61
+Global Poisoning Accuracy on Dirty Data: 0.04
+Configure Fit
+server round: 79
+[2024-07-19 10:59:06,986][flwr][DEBUG] - fit_round 79: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:01:39,258][flwr][DEBUG] - fit_round 79 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 7
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 8
+Local Clean Data Accuracy: 0.5200000000000001
+Local Backdoor accuracy: 0.8885714285714286
+Now, comb_C is [0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 8 and length of bad results is 0
+[2024-07-19 11:02:06,724][flwr][INFO] - fit progress: (79, 127.5880481004715, {'accuracy': 0.6146}, 15118.337368254899)
+Configure Evaluate
+[2024-07-19 11:02:06,725][flwr][DEBUG] - evaluate_round 79: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:02:23,152][flwr][DEBUG] - evaluate_round 79 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6114285714285714
+Federated Accuracy on Dirty Data: 0.6183333333333334
+Global Poisoning Accuracy on Dirty Data: 0.04000000000000001
+Configure Fit
+server round: 80
+[2024-07-19 11:02:23,152][flwr][DEBUG] - fit_round 80: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:04:55,728][flwr][DEBUG] - fit_round 80 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 7
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 8
+Local Clean Data Accuracy: 0.5685714285714286
+Local Backdoor accuracy: 0.8914285714285715
+Now, comb_C is [0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 8 and length of bad results is 0
+[2024-07-19 11:05:22,792][flwr][INFO] - fit progress: (80, 128.01301503181458, {'accuracy': 0.6182}, 15314.404826656915)
+Configure Evaluate
+[2024-07-19 11:05:22,792][flwr][DEBUG] - evaluate_round 80: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:05:39,781][flwr][DEBUG] - evaluate_round 80 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6512499999999999
+Federated Accuracy on Dirty Data: 0.622
+Global Poisoning Accuracy on Dirty Data: 0.027999999999999997
+Configure Fit
+server round: 81
+[2024-07-19 11:05:39,782][flwr][DEBUG] - fit_round 81: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:08:09,172][flwr][DEBUG] - fit_round 81 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 5
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 10
+Local Clean Data Accuracy: 0.564
+Local Backdoor accuracy: 0.8940000000000001
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 10 and length of bad results is 0
+[2024-07-19 11:08:30,602][flwr][INFO] - fit progress: (81, 127.13220649957657, {'accuracy': 0.6142}, 15502.214836064959)
+Configure Evaluate
+[2024-07-19 11:08:30,602][flwr][DEBUG] - evaluate_round 81: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:08:47,373][flwr][DEBUG] - evaluate_round 81 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6283333333333334
+Federated Accuracy on Dirty Data: 0.6150000000000001
+Global Poisoning Accuracy on Dirty Data: 0.03166666666666666
+Configure Fit
+server round: 82
+[2024-07-19 11:08:47,374][flwr][DEBUG] - fit_round 82: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:11:14,451][flwr][DEBUG] - fit_round 82 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 4
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 11
+Local Clean Data Accuracy: 0.57
+Local Backdoor accuracy: 0.9
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 11 and length of bad results is 0
+[2024-07-19 11:11:32,725][flwr][INFO] - fit progress: (82, 128.89452058076859, {'accuracy': 0.6137}, 15684.33774816792)
+Configure Evaluate
+[2024-07-19 11:11:32,726][flwr][DEBUG] - evaluate_round 82: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:11:49,470][flwr][DEBUG] - evaluate_round 82 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6271428571428572
+Federated Accuracy on Dirty Data: 0.61375
+Global Poisoning Accuracy on Dirty Data: 0.03375
+Configure Fit
+server round: 83
+[2024-07-19 11:11:49,471][flwr][DEBUG] - fit_round 83: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:14:16,960][flwr][DEBUG] - fit_round 83 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 5
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 10
+Local Clean Data Accuracy: 0.55
+Local Backdoor accuracy: 0.9019999999999999
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 10 and length of bad results is 0
+[2024-07-19 11:14:38,785][flwr][INFO] - fit progress: (83, 135.31575548648834, {'accuracy': 0.5915}, 15870.397865367937)
+Configure Evaluate
+[2024-07-19 11:14:38,785][flwr][DEBUG] - evaluate_round 83: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:14:55,129][flwr][DEBUG] - evaluate_round 83 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.5983333333333333
+Federated Accuracy on Dirty Data: 0.5742857142857142
+Global Poisoning Accuracy on Dirty Data: 0.11714285714285716
+Configure Fit
+server round: 84
+[2024-07-19 11:14:55,130][flwr][DEBUG] - fit_round 84: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:17:31,415][flwr][DEBUG] - fit_round 84 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 8
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 7
+Local Clean Data Accuracy: 0.53125
+Local Backdoor accuracy: 0.8725
+Now, comb_C is [0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 7 and length of bad results is 0
+[2024-07-19 11:18:02,626][flwr][INFO] - fit progress: (84, 129.2753348350525, {'accuracy': 0.6102}, 16074.239253546926)
+Configure Evaluate
+[2024-07-19 11:18:02,627][flwr][DEBUG] - evaluate_round 84: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:18:19,106][flwr][DEBUG] - evaluate_round 84 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6012500000000001
+Federated Accuracy on Dirty Data: 0.5816666666666668
+Global Poisoning Accuracy on Dirty Data: 0.03166666666666667
+Configure Fit
+server round: 85
+[2024-07-19 11:18:19,107][flwr][DEBUG] - fit_round 85: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:20:48,215][flwr][DEBUG] - fit_round 85 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 5
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 10
+Local Clean Data Accuracy: 0.51
+Local Backdoor accuracy: 0.8859999999999999
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 10 and length of bad results is 0
+[2024-07-19 11:21:09,812][flwr][INFO] - fit progress: (85, 129.60608077049255, {'accuracy': 0.6105}, 16261.424658618984)
+Configure Evaluate
+[2024-07-19 11:21:09,812][flwr][DEBUG] - evaluate_round 85: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:21:26,199][flwr][DEBUG] - evaluate_round 85 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6314285714285715
+Federated Accuracy on Dirty Data: 0.5933333333333334
+Global Poisoning Accuracy on Dirty Data: 0.03666666666666666
+Configure Fit
+server round: 86
+[2024-07-19 11:21:26,199][flwr][DEBUG] - fit_round 86: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:24:04,465][flwr][DEBUG] - fit_round 86 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 9
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 6
+Local Clean Data Accuracy: 0.5188888888888888
+Local Backdoor accuracy: 0.8955555555555557
+Now, comb_C is [0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 6 and length of bad results is 0
+[2024-07-19 11:24:37,774][flwr][INFO] - fit progress: (86, 132.5300487279892, {'accuracy': 0.6085}, 16469.386935306014)
+Configure Evaluate
+[2024-07-19 11:24:37,774][flwr][DEBUG] - evaluate_round 86: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:24:53,909][flwr][DEBUG] - evaluate_round 86 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.612857142857143
+Federated Accuracy on Dirty Data: 0.5762499999999999
+Global Poisoning Accuracy on Dirty Data: 0.03875
+Configure Fit
+server round: 87
+[2024-07-19 11:24:53,910][flwr][DEBUG] - fit_round 87: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:27:23,110][flwr][DEBUG] - fit_round 87 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 6
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 9
+Local Clean Data Accuracy: 0.47833333333333333
+Local Backdoor accuracy: 0.8966666666666666
+Now, comb_C is [0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 9 and length of bad results is 0
+[2024-07-19 11:27:46,992][flwr][INFO] - fit progress: (87, 130.98747730255127, {'accuracy': 0.6085}, 16658.60538043198)
+Configure Evaluate
+[2024-07-19 11:27:46,993][flwr][DEBUG] - evaluate_round 87: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:28:03,066][flwr][DEBUG] - evaluate_round 87 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6444444444444445
+Federated Accuracy on Dirty Data: 0.6259999999999999
+Global Poisoning Accuracy on Dirty Data: 0.036000000000000004
+Configure Fit
+server round: 88
+[2024-07-19 11:28:03,067][flwr][DEBUG] - fit_round 88: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:30:37,265][flwr][DEBUG] - fit_round 88 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 7
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 8
+Local Clean Data Accuracy: 0.5328571428571428
+Local Backdoor accuracy: 0.8728571428571429
+Now, comb_C is [0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 8 and length of bad results is 0
+[2024-07-19 11:31:04,385][flwr][INFO] - fit progress: (88, 133.18400943279266, {'accuracy': 0.6134}, 16855.99763881194)
+Configure Evaluate
+[2024-07-19 11:31:04,385][flwr][DEBUG] - evaluate_round 88: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:31:21,434][flwr][DEBUG] - evaluate_round 88 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6242857142857143
+Federated Accuracy on Dirty Data: 0.5971428571428571
+Global Poisoning Accuracy on Dirty Data: 0.038571428571428576
+Configure Fit
+server round: 89
+[2024-07-19 11:31:21,435][flwr][DEBUG] - fit_round 89: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:33:48,664][flwr][DEBUG] - fit_round 89 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 4
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 11
+Local Clean Data Accuracy: 0.5625
+Local Backdoor accuracy: 0.885
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 11 and length of bad results is 0
+[2024-07-19 11:34:07,087][flwr][INFO] - fit progress: (89, 130.50609302520752, {'accuracy': 0.6165}, 17038.69982099696)
+Configure Evaluate
+[2024-07-19 11:34:07,087][flwr][DEBUG] - evaluate_round 89: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:34:23,229][flwr][DEBUG] - evaluate_round 89 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6412500000000001
+Federated Accuracy on Dirty Data: 0.6283333333333333
+Global Poisoning Accuracy on Dirty Data: 0.030000000000000006
+Configure Fit
+server round: 90
+[2024-07-19 11:34:23,229][flwr][DEBUG] - fit_round 90: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:36:57,432][flwr][DEBUG] - fit_round 90 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 5
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 10
+Local Clean Data Accuracy: 0.514
+Local Backdoor accuracy: 0.8859999999999999
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 10 and length of bad results is 0
+[2024-07-19 11:37:18,915][flwr][INFO] - fit progress: (90, 131.10291320085526, {'accuracy': 0.616}, 17230.52775670495)
+Configure Evaluate
+[2024-07-19 11:37:18,915][flwr][DEBUG] - evaluate_round 90: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:37:35,555][flwr][DEBUG] - evaluate_round 90 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6399999999999999
+Federated Accuracy on Dirty Data: 0.6183333333333334
+Global Poisoning Accuracy on Dirty Data: 0.03666666666666666
+Configure Fit
+server round: 91
+[2024-07-19 11:37:35,556][flwr][DEBUG] - fit_round 91: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:40:02,314][flwr][DEBUG] - fit_round 91 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 5
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 10
+Local Clean Data Accuracy: 0.518
+Local Backdoor accuracy: 0.89
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 10 and length of bad results is 0
+[2024-07-19 11:40:24,425][flwr][INFO] - fit progress: (91, 133.12436544895172, {'accuracy': 0.6178}, 17416.037848047912)
+Configure Evaluate
+[2024-07-19 11:40:24,425][flwr][DEBUG] - evaluate_round 91: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:40:40,458][flwr][DEBUG] - evaluate_round 91 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.62625
+Federated Accuracy on Dirty Data: 0.5983333333333333
+Global Poisoning Accuracy on Dirty Data: 0.03166666666666666
+Configure Fit
+server round: 92
+[2024-07-19 11:40:40,459][flwr][DEBUG] - fit_round 92: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:43:14,741][flwr][DEBUG] - fit_round 92 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 5
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 10
+Local Clean Data Accuracy: 0.5359999999999999
+Local Backdoor accuracy: 0.8880000000000001
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 10 and length of bad results is 0
+[2024-07-19 11:43:36,090][flwr][INFO] - fit progress: (92, 133.9149495959282, {'accuracy': 0.6171}, 17607.703365997993)
+Configure Evaluate
+[2024-07-19 11:43:36,091][flwr][DEBUG] - evaluate_round 92: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:43:52,581][flwr][DEBUG] - evaluate_round 92 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6366666666666666
+Federated Accuracy on Dirty Data: 0.6066666666666667
+Global Poisoning Accuracy on Dirty Data: 0.045
+Configure Fit
+server round: 93
+[2024-07-19 11:43:52,581][flwr][DEBUG] - fit_round 93: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:46:28,404][flwr][DEBUG] - fit_round 93 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 7
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 8
+Local Clean Data Accuracy: 0.5257142857142858
+Local Backdoor accuracy: 0.9057142857142857
+Now, comb_C is [0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 8 and length of bad results is 0
+[2024-07-19 11:46:55,808][flwr][INFO] - fit progress: (93, 134.50778591632843, {'accuracy': 0.6131}, 17807.420604681014)
+Configure Evaluate
+[2024-07-19 11:46:55,808][flwr][DEBUG] - evaluate_round 93: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:47:12,952][flwr][DEBUG] - evaluate_round 93 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.621
+Federated Accuracy on Dirty Data: 0.5866666666666667
+Global Poisoning Accuracy on Dirty Data: 0.02666666666666667
+Configure Fit
+server round: 94
+[2024-07-19 11:47:12,953][flwr][DEBUG] - fit_round 94: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:49:44,436][flwr][DEBUG] - fit_round 94 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 7
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 8
+Local Clean Data Accuracy: 0.5014285714285714
+Local Backdoor accuracy: 0.8871428571428571
+Now, comb_C is [0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 8 and length of bad results is 0
+[2024-07-19 11:50:12,176][flwr][INFO] - fit progress: (94, 136.7105558514595, {'accuracy': 0.6117}, 18003.78891017998)
+Configure Evaluate
+[2024-07-19 11:50:12,176][flwr][DEBUG] - evaluate_round 94: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:50:29,303][flwr][DEBUG] - evaluate_round 94 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.64
+Federated Accuracy on Dirty Data: 0.5887499999999999
+Global Poisoning Accuracy on Dirty Data: 0.026249999999999996
+Configure Fit
+server round: 95
+[2024-07-19 11:50:29,304][flwr][DEBUG] - fit_round 95: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:53:02,369][flwr][DEBUG] - fit_round 95 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 6
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 9
+Local Clean Data Accuracy: 0.47833333333333333
+Local Backdoor accuracy: 0.8833333333333333
+Now, comb_C is [0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 9 and length of bad results is 0
+[2024-07-19 11:53:27,106][flwr][INFO] - fit progress: (95, 137.44520437717438, {'accuracy': 0.6123}, 18198.718779678922)
+Configure Evaluate
+[2024-07-19 11:53:27,106][flwr][DEBUG] - evaluate_round 95: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:53:44,170][flwr][DEBUG] - evaluate_round 95 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6388888888888888
+Federated Accuracy on Dirty Data: 0.622
+Global Poisoning Accuracy on Dirty Data: 0.038000000000000006
+Configure Fit
+server round: 96
+[2024-07-19 11:53:44,170][flwr][DEBUG] - fit_round 96: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:56:16,904][flwr][DEBUG] - fit_round 96 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 5
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 10
+Local Clean Data Accuracy: 0.524
+Local Backdoor accuracy: 0.8939999999999999
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 10 and length of bad results is 0
+[2024-07-19 11:56:38,526][flwr][INFO] - fit progress: (96, 135.44124579429626, {'accuracy': 0.616}, 18390.13851378695)
+Configure Evaluate
+[2024-07-19 11:56:38,526][flwr][DEBUG] - evaluate_round 96: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:56:55,024][flwr][DEBUG] - evaluate_round 96 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.612857142857143
+Federated Accuracy on Dirty Data: 0.605
+Global Poisoning Accuracy on Dirty Data: 0.028333333333333335
+Configure Fit
+server round: 97
+[2024-07-19 11:56:55,025][flwr][DEBUG] - fit_round 97: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:59:22,933][flwr][DEBUG] - fit_round 97 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 4
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 11
+Local Clean Data Accuracy: 0.525
+Local Backdoor accuracy: 0.8875
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 11 and length of bad results is 0
+[2024-07-19 11:59:41,916][flwr][INFO] - fit progress: (97, 137.89665925502777, {'accuracy': 0.6139}, 18573.529246262973)
+Configure Evaluate
+[2024-07-19 11:59:41,917][flwr][DEBUG] - evaluate_round 97: strategy sampled 15 clients (out of 50)
+[2024-07-19 11:59:58,553][flwr][DEBUG] - evaluate_round 97 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6039999999999999
+Federated Accuracy on Dirty Data: 0.6100000000000001
+Global Poisoning Accuracy on Dirty Data: 0.027777777777777776
+Configure Fit
+server round: 98
+[2024-07-19 11:59:58,554][flwr][DEBUG] - fit_round 98: strategy sampled 15 clients (out of 50)
+[2024-07-19 12:02:27,057][flwr][DEBUG] - fit_round 98 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 5
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 10
+Local Clean Data Accuracy: 0.524
+Local Backdoor accuracy: 0.8939999999999999
+Now, comb_C is [0 0 0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 10 and length of bad results is 0
+[2024-07-19 12:02:48,588][flwr][INFO] - fit progress: (98, 137.8312222957611, {'accuracy': 0.6128}, 18760.201420445926)
+Configure Evaluate
+[2024-07-19 12:02:48,589][flwr][DEBUG] - evaluate_round 98: strategy sampled 15 clients (out of 50)
+[2024-07-19 12:03:05,101][flwr][DEBUG] - evaluate_round 98 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6157142857142857
+Federated Accuracy on Dirty Data: 0.63
+Global Poisoning Accuracy on Dirty Data: 0.025
+Configure Fit
+server round: 99
+[2024-07-19 12:03:05,102][flwr][DEBUG] - fit_round 99: strategy sampled 15 clients (out of 50)
+[2024-07-19 12:05:36,662][flwr][DEBUG] - fit_round 99 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 7
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 8
+Local Clean Data Accuracy: 0.5399999999999999
+Local Backdoor accuracy: 0.8728571428571429
+Now, comb_C is [0 0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 8 and length of bad results is 0
+[2024-07-19 12:06:04,101][flwr][INFO] - fit progress: (99, 138.713911652565, {'accuracy': 0.612}, 18955.714144474943)
+Configure Evaluate
+[2024-07-19 12:06:04,102][flwr][DEBUG] - evaluate_round 99: strategy sampled 15 clients (out of 50)
+[2024-07-19 12:06:20,495][flwr][DEBUG] - evaluate_round 99 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6480000000000001
+Federated Accuracy on Dirty Data: 0.6080000000000001
+Global Poisoning Accuracy on Dirty Data: 0.026000000000000002
+Configure Fit
+server round: 100
+[2024-07-19 12:06:20,496][flwr][DEBUG] - fit_round 100: strategy sampled 15 clients (out of 50)
+[2024-07-19 12:08:54,418][flwr][DEBUG] - fit_round 100 received 15 results and 0 failures
+malicious is ['0', '0', '0', '0', '0', '0', '0']
+Number of Evil Clients: 8
+Number of Preset Malicious Clients is 0
+Number of Preset Benign Clients is 7
+Local Clean Data Accuracy: 0.5262499999999999
+Local Backdoor accuracy: 0.9062500000000001
+Now, comb_C is [0 0 0 0 0 0 0]
+Clustering Accuracy is 1.0
+length of good results is 7 and length of bad results is 0
+[2024-07-19 12:09:24,896][flwr][INFO] - fit progress: (100, 138.32314145565033, {'accuracy': 0.6093}, 19156.508862901945)
+Configure Evaluate
+[2024-07-19 12:09:24,896][flwr][DEBUG] - evaluate_round 100: strategy sampled 15 clients (out of 50)
+[2024-07-19 12:09:41,921][flwr][DEBUG] - evaluate_round 100 received 15 results and 0 failures
+Aggregate evaluate
+benign record is ['2', '23', '8', '1', '14', '9', '22', '28', '7', '27', '0', '10', '11', '20', '26', '24', '18', '17', '15', '16', '3', '29', '6', '19', '25', '13']
+Federated Accuracy on Clean Data: 0.6142857142857142
+Federated Accuracy on Dirty Data: 0.6014285714285714
+Global Poisoning Accuracy on Dirty Data: 0.025714285714285717
+[2024-07-19 12:09:43,044][flwr][INFO] - FL finished in 19174.65681700001
+[2024-07-19 12:09:43,051][flwr][INFO] - app_fit: losses_distributed [(1, 12.945998287200927), (2, 11.90078055858612), (3, 9.659528215726217), (4, 9.076856851577759), (5, 8.95934225320816), (6, 8.588053132806506), (7, 8.057797040258135), (8, 7.939382152897971), (9, 7.684109389781952), (10, 7.702751040458679), (11, 7.6379946519931154), (12, 7.815553261174096), (13, 7.6425110300381975), (14, 7.639238119125366), (15, 7.747049629688263), (16, 7.324698224663734), (17, 7.660268400396619), (18, 7.4382815062999725), (19, 7.421582114696503), (20, 6.737389666693551), (21, 6.881541877985001), (22, 6.5174912677870855), (23, 7.2167929496083945), (24, 7.759723865985871), (25, 6.843162503507402), (26, 7.307384938001633), (27, 7.025997247960833), (28, 7.2041797169617245), (29, 7.013798609375954), (30, 6.882946577337053), (31, 6.44047138094902), (32, 7.156630724668503), (33, 7.293091793855031), (34, 6.720343574881554), (35, 7.232644667228063), (36, 6.5669489920139315), (37, 6.4512755334377285), (38, 7.16355041662852), (39, 7.161248177289963), (40, 7.1551259085536), (41, 7.6373154776436945), (42, 7.048562953869502), (43, 6.414273887872696), (44, 6.694801289588213), (45, 7.077081302801768), (46, 7.033475107616848), (47, 6.652423668652773), (48, 7.033521518111229), (49, 6.946590602397919), (50, 7.329611171036959), (51, 7.256329095363617), (52, 8.151462256908417), (53, 7.151915833353996), (54, 6.955941907384179), (55, 6.8966642916202545), (56, 7.365993433528477), (57, 6.890657949447632), (58, 6.88041387285505), (59, 7.365072898566723), (60, 7.786368764936924), (61, 7.02273598739079), (62, 7.687979027628899), (63, 7.662978043158849), (64, 7.015690195560455), (65, 7.355064645409584), (66, 7.552246881855859), (67, 7.616193354129791), (68, 8.376475775241852), (69, 7.892504477500916), (70, 6.48347886800766), (71, 6.567394600974189), (72, 8.145177491009235), (73, 7.473138797283172), (74, 7.619203073637826), (75, 7.593566459417343), (76, 7.525873952441746), (77, 8.269565276801586), (78, 8.036456485589346), (79, 7.904848967279706), (80, 7.310354165732861), (81, 7.820039048790932), (82, 7.501629224845341), (83, 8.424785256385803), (84, 8.474752239882946), (85, 7.485817236559732), (86, 8.44414450441088), (87, 7.5552771422598095), (88, 8.033430985042028), (89, 7.2989121079444885), (90, 7.581668651766247), (91, 7.7253334149718285), (92, 7.98946268690957), (93, 8.479520219564439), (94, 7.825224210818608), (95, 7.644289586279127), (96, 7.840865680149624), (97, 8.928881347179413), (98, 8.397463764463152), (99, 7.818084841966629), (100, 8.315508144242424)]
+[2024-07-19 12:09:43,051][flwr][INFO] - app_fit: metrics_distributed_fit {}
+[2024-07-19 12:09:43,051][flwr][INFO] - app_fit: metrics_distributed {'accuracy': [(1, 0.11866666666666664), (2, 0.17333333333333334), (3, 0.3433333333333334), (4, 0.408), (5, 0.428), (6, 0.45285714285714285), (7, 0.4757142857142857), (8, 0.5042857142857142), (9, 0.5375), (10, 0.5242857142857144), (11, 0.5225), (12, 0.5022222222222222), (13, 0.53), (14, 0.5316666666666666), (15, 0.5337500000000001), (16, 0.56375), (17, 0.5700000000000001), (18, 0.5512499999999999), (19, 0.5730000000000001), (20, 0.5857142857142857), (21, 0.5670000000000001), (22, 0.6088888888888888), (23, 0.5614285714285714), (24, 0.5680000000000001), (25, 0.5933333333333333), (26, 0.595), (27, 0.59), (28, 0.5714285714285715), (29, 0.5912499999999999), (30, 0.5822222222222222), (31, 0.6066666666666667), (32, 0.592), (33, 0.5977777777777779), (34, 0.61125), (35, 0.5900000000000001), (36, 0.613), (37, 0.62), (38, 0.5877777777777777), (39, 0.58125), (40, 0.59125), (41, 0.5942857142857142), (42, 0.6133333333333334), (43, 0.62), (44, 0.60875), (45, 0.6133333333333333), (46, 0.61), (47, 0.6125), (48, 0.605), (49, 0.595), (50, 0.605), (51, 0.6060000000000001), (52, 0.595), (53, 0.6016666666666667), (54, 0.6227272727272727), (55, 0.6449999999999999), (56, 0.6066666666666667), (57, 0.634), (58, 0.6357142857142857), (59, 0.6125), (60, 0.6212500000000001), (61, 0.6157142857142857), (62, 0.62375), (63, 0.635), (64, 0.642), (65, 0.615), (66, 0.6322222222222222), (67, 0.6222222222222222), (68, 0.593), (69, 0.612), (70, 0.642), (71, 0.6633333333333333), (72, 0.5962500000000001), (73, 0.6519999999999999), (74, 0.61), (75, 0.634), (76, 0.6233333333333333), (77, 0.6074999999999999), (78, 0.6222222222222223), (79, 0.6114285714285714), (80, 0.6512499999999999), (81, 0.6283333333333334), (82, 0.6271428571428572), (83, 0.5983333333333333), (84, 0.6012500000000001), (85, 0.6314285714285715), (86, 0.612857142857143), (87, 0.6444444444444445), (88, 0.6242857142857143), (89, 0.6412500000000001), (90, 0.6399999999999999), (91, 0.62625), (92, 0.6366666666666666), (93, 0.621), (94, 0.64), (95, 0.6388888888888888), (96, 0.612857142857143), (97, 0.6039999999999999), (98, 0.6157142857142857), (99, 0.6480000000000001), (100, 0.6142857142857142)], 'global_poison': [(1, 0.0033333333333333335), (2, 0.02333333333333333), (3, 0.12000000000000002), (4, 0.142), (5, 0.16699999999999998), (6, 0.1785714285714286), (7, 0.11857142857142858), (8, 0.10714285714285714), (9, 0.12000000000000002), (10, 0.1057142857142857), (11, 0.105), (12, 0.16666666666666669), (13, 0.10666666666666666), (14, 0.095), (15, 0.09875), (16, 0.0975), (17, 0.11000000000000001), (18, 0.11000000000000001), (19, 0.09299999999999999), (20, 0.09857142857142857), (21, 0.10899999999999999), (22, 0.08666666666666667), (23, 0.09285714285714286), (24, 0.102), (25, 0.0911111111111111), (26, 0.08900000000000001), (27, 0.08555555555555555), (28, 0.10142857142857142), (29, 0.08875000000000001), (30, 0.08), (31, 0.08166666666666668), (32, 0.07799999999999999), (33, 0.026666666666666665), (34, 0.08875), (35, 0.04000000000000001), (36, 0.09200000000000001), (37, 0.09), (38, 0.020000000000000004), (39, 0.08625), (40, 0.028750000000000005), (41, 0.09142857142857144), (42, 0.02333333333333333), (43, 0.026000000000000002), (44, 0.08499999999999999), (45, 0.01833333333333333), (46, 0.07444444444444444), (47, 0.02), (48, 0.02375), (49, 0.025), (50, 0.02125), (51, 0.032), (52, 0.09166666666666666), (53, 0.030000000000000002), (54, 0.03), (55, 0.028749999999999998), (56, 0.030000000000000002), (57, 0.068), (58, 0.021428571428571432), (59, 0.027499999999999997), (60, 0.02375), (61, 0.02), (62, 0.02), (63, 0.043333333333333335), (64, 0.036000000000000004), (65, 0.028749999999999998), (66, 0.03222222222222223), (67, 0.03666666666666667), (68, 0.029000000000000005), (69, 0.084), (70, 0.024000000000000004), (71, 0.025555555555555554), (72, 0.028750000000000005), (73, 0.023000000000000003), (74, 0.02142857142857143), (75, 0.020000000000000004), (76, 0.024444444444444446), (77, 0.03), (78, 0.033333333333333326), (79, 0.02428571428571429), (80, 0.021249999999999998), (81, 0.028333333333333335), (82, 0.030000000000000002), (83, 0.07333333333333333), (84, 0.045), (85, 0.025714285714285714), (86, 0.03285714285714286), (87, 0.024444444444444446), (88, 0.027142857142857142), (89, 0.028749999999999998), (90, 0.019999999999999997), (91, 0.027500000000000004), (92, 0.034444444444444444), (93, 0.039), (94, 0.039999999999999994), (95, 0.021111111111111115), (96, 0.02428571428571429), (97, 0.036000000000000004), (98, 0.025714285714285717), (99, 0.024), (100, 0.030000000000000002)]}
+[2024-07-19 12:09:43,052][flwr][INFO] - app_fit: losses_centralized [(0, 182.36856126785278), (1, 203.1835389137268), (2, 183.1642894744873), (3, 152.40065336227417), (4, 148.7890429496765), (5, 147.3805547952652), (6, 145.50176537036896), (7, 132.56997907161713), (8, 129.64790511131287), (9, 130.6736810207367), (10, 128.4342988729477), (11, 127.768385887146), (12, 135.9577757716179), (13, 126.86123442649841), (14, 126.06196457147598), (15, 123.49315077066422), (16, 122.86355888843536), (17, 124.80709832906723), (18, 121.34750270843506), (19, 121.09707570075989), (20, 120.33689332008362), (21, 118.73444873094559), (22, 117.5670993924141), (23, 117.31035923957825), (24, 118.15289896726608), (25, 118.84697031974792), (26, 117.76959109306335), (27, 116.18424928188324), (28, 118.04720121622086), (29, 116.18390244245529), (30, 116.3571457862854), (31, 116.71672117710114), (32, 115.8500308394432), (33, 110.85239845514297), (34, 115.81117260456085), (35, 113.3020087480545), (36, 118.15989124774933), (37, 117.04125547409058), (38, 112.01297801733017), (39, 117.65559667348862), (40, 114.37296271324158), (41, 119.19654679298401), (42, 112.15867429971695), (43, 114.67784190177917), (44, 120.91246747970581), (45, 114.76750892400742), (46, 121.08363962173462), (47, 113.53281956911087), (48, 115.79382932186127), (49, 119.48385101556778), (50, 118.35627007484436), (51, 121.61490482091904), (52, 127.14710992574692), (53, 117.94400256872177), (54, 116.19418025016785), (55, 119.39354932308197), (56, 121.22765934467316), (57, 129.52067017555237), (58, 121.1103595495224), (59, 117.99282723665237), (60, 121.5876197218895), (61, 123.08102190494537), (62, 124.20847016572952), (63, 124.15241396427155), (64, 127.19129687547684), (65, 125.64404726028442), (66, 125.55089443922043), (67, 126.91377830505371), (68, 128.63807880878448), (69, 131.34175026416779), (70, 122.11898159980774), (71, 125.314284324646), (72, 124.28610932826996), (73, 130.15474569797516), (74, 131.46712625026703), (75, 126.72522270679474), (76, 130.11896443367004), (77, 129.87882441282272), (78, 134.64316129684448), (79, 127.5880481004715), (80, 128.01301503181458), (81, 127.13220649957657), (82, 128.89452058076859), (83, 135.31575548648834), (84, 129.2753348350525), (85, 129.60608077049255), (86, 132.5300487279892), (87, 130.98747730255127), (88, 133.18400943279266), (89, 130.50609302520752), (90, 131.10291320085526), (91, 133.12436544895172), (92, 133.9149495959282), (93, 134.50778591632843), (94, 136.7105558514595), (95, 137.44520437717438), (96, 135.44124579429626), (97, 137.89665925502777), (98, 137.8312222957611), (99, 138.713911652565), (100, 138.32314145565033)]
+[2024-07-19 12:09:43,052][flwr][INFO] - app_fit: metrics_centralized {'accuracy': [(0, 0.0945), (1, 0.1207), (2, 0.2317), (3, 0.3434), (4, 0.3927), (5, 0.4137), (6, 0.4282), (7, 0.4653), (8, 0.481), (9, 0.4852), (10, 0.494), (11, 0.4975), (12, 0.4801), (13, 0.5083), (14, 0.5174), (15, 0.5245), (16, 0.5275), (17, 0.5298), (18, 0.5343), (19, 0.5385), (20, 0.5391), (21, 0.5425), (22, 0.5493), (23, 0.5565), (24, 0.5573), (25, 0.5538), (26, 0.5618), (27, 0.5658), (28, 0.5596), (29, 0.5659), (30, 0.5665), (31, 0.5683), (32, 0.5745), (33, 0.5923), (34, 0.5743), (35, 0.5926), (36, 0.5751), (37, 0.5767), (38, 0.5932), (39, 0.5785), (40, 0.5939), (41, 0.5784), (42, 0.5967), (43, 0.5974), (44, 0.5787), (45, 0.6024), (46, 0.5816), (47, 0.6009), (48, 0.6046), (49, 0.6032), (50, 0.6025), (51, 0.5986), (52, 0.5784), (53, 0.6017), (54, 0.6076), (55, 0.6076), (56, 0.6046), (57, 0.5813), (58, 0.6014), (59, 0.6076), (60, 0.6077), (61, 0.6103), (62, 0.6077), (63, 0.6077), (64, 0.6018), (65, 0.6097), (66, 0.6099), (67, 0.6075), (68, 0.6083), (69, 0.5864), (70, 0.61), (71, 0.606), (72, 0.6093), (73, 0.6018), (74, 0.5976), (75, 0.6088), (76, 0.6078), (77, 0.6093), (78, 0.6048), (79, 0.6146), (80, 0.6182), (81, 0.6142), (82, 0.6137), (83, 0.5915), (84, 0.6102), (85, 0.6105), (86, 0.6085), (87, 0.6085), (88, 0.6134), (89, 0.6165), (90, 0.616), (91, 0.6178), (92, 0.6171), (93, 0.6131), (94, 0.6117), (95, 0.6123), (96, 0.616), (97, 0.6139), (98, 0.6128), (99, 0.612), (100, 0.6093)]}
