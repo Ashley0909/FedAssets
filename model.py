@@ -82,7 +82,7 @@ def train(net, trainloader, device, epochs, learning_rate, proximal_mu, maliciou
         net = _train_one_epoch(net, global_params, trainloader, device, criterion, optimizer, proximal_mu, malicious, p_rate, dataset, target_label)
 
     del global_params
-    torch.cuda.empty_cache()
+    # torch.cuda.empty_cache()
 
 
 def _train_one_epoch(net, global_params, trainloader, device, criterion, optimizer: torch.optim.Adam, proximal_mu: float, malicious, p_rate, dataset, target_label) -> nn.Module:

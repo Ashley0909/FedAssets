@@ -60,8 +60,8 @@ def main(cfg: DictConfig):
             evaluate_metrics_aggregation_fn=weighted_average,  # <-- pass the metric aggregation function
         ),
         client_resources={
-            "num_cpus": 1,   #2
-            "num_gpus": 0.5, #0.0
+            "num_cpus": 2,   #2
+            "num_gpus": 0.0, #0.0
         }, 
     )
 

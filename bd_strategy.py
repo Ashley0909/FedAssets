@@ -5,6 +5,7 @@ from functools import reduce
 import numpy as np
 from time import time
 import random
+import os
 
 from collections import OrderedDict, Counter
 from omegaconf import DictConfig
@@ -355,8 +356,8 @@ class NNtrain(Strategy):
         comb_C = np.array(malicious).astype(int) # Clustering 100%
         log(DEBUG, f"comb_C is {comb_C}")
 
-        # if server_round < 5:
-        #     heatmaps(local_cid, comb_C, evil_fcw, np.array(fcw), 'Output Layer Weights', server_round)
+        # if server_round == 1:
+        #     heatmaps(local_cid, comb_C, evil_fcw, np.array(fcw), 'Output Layer Weights', server_round, lr=0.0001)
 
         record, acc_diff = 1, 0
         
@@ -608,7 +609,7 @@ def nd_clustering(parameter, cid, malicious, layer, name, server_round, e, flag,
 
     return comb_C, e, flag
 
-def heatmaps(local_cid, comb_C, evil_layer, layer, name, server_round):
+def heatmaps(local_cid, comb_C, evil_layer, layer, name, server_round, lr=0.01):
     textstr = ''
     good_client = local_cid[comb_C == 0]
     bad_client = local_cid[comb_C == 1]
@@ -622,8 +623,10 @@ def heatmaps(local_cid, comb_C, evil_layer, layer, name, server_round):
     bad_layer = layer[comb_C == 1]
 
     if evil_layer != []:
+        save_client_weights(good_layer, bad_layer, lr, evil_layer=evil_layer)
         plt.imshow(np.concatenate((good_layer, bad_layer, np.array(evil_layer)), axis=0), cmap='viridis', interpolation='nearest')
     else:
+        save_client_weights(good_layer, bad_layer, lr)
         plt.imshow(np.concatenate((good_layer, bad_layer), axis=0), cmap='viridis', interpolation='nearest')
     plt.colorbar()
     plt.annotate(textstr, xy=(0,0.5), verticalalignment='center',  horizontalalignment='left', xycoords='figure fraction')
@@ -736,3 +739,14 @@ def merge_clients(comb_C, fcw, local_cid, benign_average, malicious_average, glo
     comb_C = np.array(mod_combC)
 
     return comb_C, record, acc_diff
+
+def save_client_weights(good_layer, bad_layer, num_local_epochs, save_dir="saved_weights", evil_layer=None):
+    os.makedirs(save_dir, exist_ok=True)
+    if evil_layer is not None:
+        w = [good_layer, bad_layer, evil_layer]
+    else:
+        w = [good_layer, bad_layer]
+        
+    # Save as a .pt file (torch tensor)
+    filename = f"lr_{num_local_epochs}.pt"
+    torch.save(w, os.path.join(save_dir, filename))
