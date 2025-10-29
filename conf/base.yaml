@@ -2,17 +2,18 @@
 
 
 dataset: 'cifar10'
-num_rounds: 1
+num_rounds: 100
 num_clients: 50
 batch_size: 20
 num_classes: 10
 target_label: 9
 num_clients_per_round_fit: 15
 num_clients_per_round_eval: 15
-device: "cpu"
+device: "cuda"
+strictness_lambda: 6
 config_fit:
   poisoning_rate: 0.7
-  lr: 0.0001
+  lr: 0.01
   momentum: 0.9
   local_epochs: 5
   proximal_mu: 2.0  #0.0 if FedAvg (IID)  #2.0 if FedProx (Non-IID)

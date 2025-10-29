@@ -58,10 +58,13 @@ def main(cfg: DictConfig):
             evaluate_fn=get_evaluate_fn(cfg, cfg.num_classes, testloaders, 0),
             attack_evaluate_fn=get_attacker_evaluate_fn(cfg, cfg.num_classes, testloaders, cfg.target_label),  
             evaluate_metrics_aggregation_fn=weighted_average,  # <-- pass the metric aggregation function
+
+            # FedAssets config
+            strictness_lambda=cfg.strictness_lambda,
         ),
         client_resources={
             "num_cpus": 2,   #2
-            "num_gpus": 0.0, #0.0
+            "num_gpus": 1.0, #0.0
         }, 
     )
 
