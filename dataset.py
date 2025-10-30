@@ -78,11 +78,13 @@ def get_celeba(data_path: str = './data'):
 
     trainset = CelebA(data_path, split='train', download=True, transform=tr)
     testset = CelebA(data_path, split='test', download=True, transform=tr)
+    valset = CelebA(data_path, split='valid', download=True, transform=tr)
 
     trainset = filter_attributes(trainset, selected_attributes)
     testset = filter_attributes(testset, selected_attributes)
+    valset = filter_attributes(valset, selected_attributes)
 
-    return trainset, testset
+    return trainset, testset, valset
 
 def prepare_clientdataset(config: DictConfig,
                     num_partitions: int, 
@@ -102,7 +104,7 @@ def prepare_clientdataset(config: DictConfig,
     elif dataset == 'lfw':
         trainset, testset = get_lfw(data_path= './data')
     elif dataset == 'celeba':
-        trainset, testset = get_celeba(data_path= './data')
+        trainset, testset, valset = get_celeba(data_path= './data')
     else:
         log(WARNING, "Invalid Dataset")
         exit(-1)
@@ -122,30 +124,55 @@ def prepare_clientdataset(config: DictConfig,
         seed=42,
     )
 
+    if dataset == 'celeba': # They have build-in validation data
+        goodvalsets, badvalsets = _partition_data(
+            valset,
+            num_partitions,
+            batch_size,
+            p_rate,
+            benign_ratio=config.ratio_benign_client,
+            iid=config.iid,
+            balance=config.balance,
+            power_law=config.power_law,
+            dirichlet=config.dirichlet,
+            alpha=config.alpha,
+            seed=42,
+        )
+
     bdtrainloaders = []
     bdvalloaders = []
     cleantrainloaders = []
     cleanvalloaders = []
 
-    for bdtrainset_ in badtrainsets:  # per client
-        num_total = len(bdtrainset_)  # total number of samples per client
-        num_val = int(val_ratio * num_total)
-        num_train = num_total - num_val
+    if dataset == 'celeba':
+        for bdtrainset_ in badtrainsets:
+            bdtrainloaders.append(DataLoader(bdtrainset_, batch_size=batch_size, shuffle=True, num_workers=0, drop_last=True)) # drop_last=True throws away the last batch if it has fewer samples
+        for bdvalset_ in badvalsets:
+            bdvalloaders.append(DataLoader(bdvalset_, batch_size=batch_size, shuffle=False, num_workers=0, drop_last=True))
+        for ctrainset_ in goodtrainsets:
+            cleantrainloaders.append(DataLoader(ctrainset_, batch_size=batch_size, shuffle=True, num_workers=0, drop_last=True))
+        for cvalset_ in goodvalsets:
+            cleanvalloaders.append(DataLoader(cvalset_, batch_size=batch_size, shuffle=False, num_workers=0, drop_last=True))
+    else:
+        for bdtrainset_ in badtrainsets:  # per client
+            num_total = len(bdtrainset_)  # total number of samples per client
+            num_val = int(val_ratio * num_total)
+            num_train = num_total - num_val
 
-        for_train, for_val = random_split(bdtrainset_, [num_train, num_val], torch.Generator().manual_seed(2023))
+            for_train, for_val = random_split(bdtrainset_, [num_train, num_val], torch.Generator().manual_seed(2023))
 
-        bdtrainloaders.append(DataLoader(for_train, batch_size=batch_size, shuffle=True, num_workers=0, drop_last=True)) # drop_last=True throws away the last batch if it has fewer samples
-        bdvalloaders.append(DataLoader(for_val, batch_size=batch_size, shuffle=False, num_workers=0, drop_last=True))
+            bdtrainloaders.append(DataLoader(for_train, batch_size=batch_size, shuffle=True, num_workers=0, drop_last=True)) # drop_last=True throws away the last batch if it has fewer samples
+            bdvalloaders.append(DataLoader(for_val, batch_size=batch_size, shuffle=False, num_workers=0, drop_last=True))
 
-    for ctrainset_ in goodtrainsets:
-        num_total = len(ctrainset_)
-        num_val = int(val_ratio * num_total)
-        num_train = num_total - num_val
+        for ctrainset_ in goodtrainsets:
+            num_total = len(ctrainset_)
+            num_val = int(val_ratio * num_total)
+            num_train = num_total - num_val
 
-        for_train, for_val = random_split(ctrainset_, [num_train, num_val], torch.Generator().manual_seed(2023))
+            for_train, for_val = random_split(ctrainset_, [num_train, num_val], torch.Generator().manual_seed(2023))
 
-        cleantrainloaders.append(DataLoader(for_train, batch_size=batch_size, shuffle=True, num_workers=0, drop_last=True))
-        cleanvalloaders.append(DataLoader(for_val, batch_size=batch_size, shuffle=False, num_workers=0, drop_last=True))
+            cleantrainloaders.append(DataLoader(for_train, batch_size=batch_size, shuffle=True, num_workers=0, drop_last=True))
+            cleanvalloaders.append(DataLoader(for_val, batch_size=batch_size, shuffle=False, num_workers=0, drop_last=True))
 
     testloader = DataLoader(testset, batch_size=batch_size)
 

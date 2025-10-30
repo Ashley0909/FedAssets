@@ -5,6 +5,7 @@ from functools import reduce
 import numpy as np
 from time import time
 import random
+import os
 
 from collections import OrderedDict, Counter
 from omegaconf import DictConfig
@@ -101,6 +102,7 @@ class NNtrain(Strategy):
         initial_parameters: Optional[Parameters] = None,
         fit_metrics_aggregation_fn: Optional[MetricsAggregationFn] = None,
         evaluate_metrics_aggregation_fn: Optional[MetricsAggregationFn] = None,
+        strictness_lambda: float = 13.0,
     ) -> None:
 
         super().__init__()
@@ -124,7 +126,7 @@ class NNtrain(Strategy):
         self.initial_parameters = initial_parameters
         self.fit_metrics_aggregation_fn = fit_metrics_aggregation_fn
         self.evaluate_metrics_aggregation_fn = evaluate_metrics_aggregation_fn
-
+        self.strictness_lambda = strictness_lambda
 
     def __repr__(self) -> str:
         rep = f"NNtrain(accept_failures={self.accept_failures})"
@@ -352,12 +354,11 @@ class NNtrain(Strategy):
 
         comb_C, e, flag = nd_clustering(parameter, local_cid, malicious, fcw, "50C15", server_round, e, flag, 2)
 
-        """Assume Clustering 100%"""
-        comb_C = np.array(malicious).astype(int)
+        comb_C = np.array(malicious).astype(int) # Clustering 100%
         log(DEBUG, f"comb_C is {comb_C}")
 
-        if server_round < 5:
-            heatmaps(local_cid, comb_C, evil_fcw, np.array(fcw), 'Output Layer Weights', server_round)
+        # if server_round == 1:
+        #     heatmaps(local_cid, comb_C, evil_fcw, np.array(fcw), 'Output Layer Weights', server_round, lr=0.0001)
 
         record, acc_diff = 1, 0
         
@@ -420,8 +421,8 @@ class NNtrain(Strategy):
                 acc_diff = 0
         else:
             comb_C, record, acc_diff = merge_clients(comb_C, fcw, local_cid, benign_average, malicious_average, global_targetlabel)
-            """Assume Clustering 100%"""
-            comb_C = np.array(malicious).astype(int)
+            
+            comb_C = np.array(malicious).astype(int) # Clustering 100%
 
         log(DEBUG, f"Now, comb_C is {comb_C}")
 
@@ -450,7 +451,7 @@ class NNtrain(Strategy):
         bad_results = [weights_results[i] for i in range(len(weights_results)) if comb_C[i] == 1]
         log(INFO, f"length of good results is {len(good_results)} and length of bad results is {len(bad_results)}")
 
-        parameters_aggregated = ndarrays_to_parameters(resnet_aggregate(good_results, bad_results, evil_results, acc_diff, global_targetlabel))
+        parameters_aggregated = ndarrays_to_parameters(adaptive_aggregate(good_results, bad_results, evil_results, acc_diff, global_targetlabel, self.strictness_lambda))
 
         # Aggregate custom metrics if aggregation fn was provided
         metrics_aggregated = {}
@@ -537,24 +538,24 @@ class NNtrain(Strategy):
             # log(INFO, f"Federated Accuracy on Dirty Data: {dirty_aggregated['accuracy']}")
             log(INFO, f"Global Poisoning Accuracy on Dirty Data (GBA): {dirty_aggregated['poison_acc']}")
 
-        if server_round == 100:
-            email_sender = '09auhoiting@gmail.com'
-            email_password = 'fgkkhdwmluvpxewp'
-            email_receiver = '09auhoiting@gmail.com'
-            subject = 'Vscode Run Result'
-            body = 'Ran Successfully. Final Accuracy is {GA}'.format(GA=metrics_aggregated["accuracy"])
+        # if server_round == 100:
+        #     email_sender = '09auhoiting@gmail.com'
+        #     email_password = 'fgkkhdwmluvpxewp'
+        #     email_receiver = '09auhoiting@gmail.com'
+        #     subject = 'Vscode Run Result'
+        #     body = 'Ran Successfully. Final Accuracy is {GA}'.format(GA=metrics_aggregated["accuracy"])
 
-            em = EmailMessage()
-            em['From'] = email_sender
-            em['To'] = email_receiver
-            em['Subject'] = subject
-            em.set_content(body)
+        #     em = EmailMessage()
+        #     em['From'] = email_sender
+        #     em['To'] = email_receiver
+        #     em['Subject'] = subject
+        #     em.set_content(body)
 
-            context = ssl.create_default_context()
+        #     context = ssl.create_default_context()
 
-            with smtplib.SMTP_SSL('smtp.gmail.com',465, context=context) as smtp:
-                smtp.login(email_sender, email_password)
-                smtp.sendmail(email_sender, email_receiver, em.as_string())
+        #     with smtplib.SMTP_SSL('smtp.gmail.com',465, context=context) as smtp:
+        #         smtp.login(email_sender, email_password)
+        #         smtp.sendmail(email_sender, email_receiver, em.as_string())
 
         return loss_aggregated, metrics_aggregated
 
@@ -609,7 +610,7 @@ def nd_clustering(parameter, cid, malicious, layer, name, server_round, e, flag,
 
     return comb_C, e, flag
 
-def heatmaps(local_cid, comb_C, evil_layer, layer, name, server_round):
+def heatmaps(local_cid, comb_C, evil_layer, layer, name, server_round, lr=0.01):
     textstr = ''
     good_client = local_cid[comb_C == 0]
     bad_client = local_cid[comb_C == 1]
@@ -623,8 +624,10 @@ def heatmaps(local_cid, comb_C, evil_layer, layer, name, server_round):
     bad_layer = layer[comb_C == 1]
 
     if evil_layer != []:
+        save_client_weights(good_layer, bad_layer, lr, evil_layer=evil_layer)
         plt.imshow(np.concatenate((good_layer, bad_layer, np.array(evil_layer)), axis=0), cmap='viridis', interpolation='nearest')
     else:
+        save_client_weights(good_layer, bad_layer, lr)
         plt.imshow(np.concatenate((good_layer, bad_layer), axis=0), cmap='viridis', interpolation='nearest')
     plt.colorbar()
     plt.annotate(textstr, xy=(0,0.5), verticalalignment='center',  horizontalalignment='left', xycoords='figure fraction')
@@ -638,7 +641,8 @@ def compute_average(data, count):
     average = np.sum(data, axis=0) / count
     return average
 
-def resnet_aggregate(good_result, bad_result, evil_result, acc_diff, target_label):
+def adaptive_aggregate(good_result, bad_result, evil_result, acc_diff, target_label, strictness_lambda=13.0):
+    print("strictness lambda is", strictness_lambda)
     malicious_result = bad_result + evil_result
 
     good_numex_total = sum([num_examples for _, num_examples in good_result])
@@ -671,7 +675,7 @@ def resnet_aggregate(good_result, bad_result, evil_result, acc_diff, target_labe
                 if malicious_prime != []:
                     neuron_dists = list(map(abs, map(lambda x,y: x - y, [sum(x) for x in good_prime[l]], [sum(y) for y in malicious_prime[l]])))
                     # sim_weight_list = [np.exp(0 * neuron_dists[i]) for i in range(len(neuron_dists))]  #EQ
-                    sim_weight_list = [np.exp(-13 * neuron_dists[i]) if i != target_label else 0 for i in range(len(neuron_dists))]  #Mine
+                    sim_weight_list = [np.exp(-strictness_lambda * neuron_dists[i]) if i != target_label else 0 for i in range(len(neuron_dists))]  #Ours
                     weighted_param_aggregated = [
                         [
                             (g+(s*b)) / (1+s)
@@ -684,8 +688,8 @@ def resnet_aggregate(good_result, bad_result, evil_result, acc_diff, target_labe
             elif len(good_prime[l].shape) < 1:
                 if malicious_prime != []:
                     dist = abs(good_prime[l] - malicious_prime[l])
-                    sim_weight = np.exp(-13 * dist) #Mine
                     # sim_weight = np.exp(0 * dist) #EQ
+                    sim_weight = np.exp(-strictness_lambda * dist) #Ours
                     weighted_param_aggregated = (good_prime[l] + (sim_weight * malicious_prime[l]))/(1+sim_weight)
                 else:
                     weighted_param_aggregated = good_prime[l]
@@ -693,7 +697,7 @@ def resnet_aggregate(good_result, bad_result, evil_result, acc_diff, target_labe
                 if malicious_prime != []:
                     neuron_dists = list(map(abs, map(lambda x,y: x - y, good_prime[l], malicious_prime[l])))
                     # sim_weight_list = [np.exp(-0 * neuron_dists[i]) for i in range(len(neuron_dists))]  #EQ
-                    sim_weight_list = [np.exp(-13 * neuron_dists[i]) if i != target_label else 0 for i in range(len(neuron_dists))]  #Mine
+                    sim_weight_list = [np.exp(-strictness_lambda * neuron_dists[i]) if i != target_label else 0 for i in range(len(neuron_dists))]  #Ours
                     weighted_param_aggregated = list(map(lambda g,b,s: (g + (s * b))/ (1 + s), good_prime[l], malicious_prime[l], sim_weight_list)) 
                 else:
                     weighted_param_aggregated = good_prime[l]
@@ -705,7 +709,7 @@ def resnet_aggregate(good_result, bad_result, evil_result, acc_diff, target_labe
     # Still need to consider the case when there is no good client
     elif malicious_prime != []:
         # sim_weight = np.exp(0 * acc_diff) #EQ
-        sim_weight = np.exp(-13 * acc_diff) #Mine
+        sim_weight = np.exp(-strictness_lambda * acc_diff) #Ours
         for l in range(len(malicious_prime)):
             weighted_param_aggregated = (sim_weight * malicious_prime[l])/sim_weight
             good_prime.append(weighted_param_aggregated)  # records each layer
@@ -737,3 +741,14 @@ def merge_clients(comb_C, fcw, local_cid, benign_average, malicious_average, glo
     comb_C = np.array(mod_combC)
 
     return comb_C, record, acc_diff
+
+def save_client_weights(good_layer, bad_layer, num_local_epochs, save_dir="saved_weights", evil_layer=None):
+    os.makedirs(save_dir, exist_ok=True)
+    if evil_layer is not None:
+        w = [good_layer, bad_layer, evil_layer]
+    else:
+        w = [good_layer, bad_layer]
+        
+    # Save as a .pt file (torch tensor)
+    filename = f"lr_{num_local_epochs}.pt"
+    torch.save(w, os.path.join(save_dir, filename))

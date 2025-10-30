@@ -1,4 +1,5 @@
 venv/
+new_venv/
 outputs/
 stats/
 data/
