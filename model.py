@@ -69,13 +69,16 @@ def get_parameters(net) -> List[np.ndarray]:
     return [val.cpu().numpy() for _, val in net.state_dict().items()]
 
 def train(net, trainloader, device, epochs, learning_rate, proximal_mu, malicious, p_rate, dataset, target_label) -> None:
+    # Ensure the network is on the correct device
+    net = net.to(device)
+    
     if dataset == 'celeba':
         criterion = torch.nn.BCEWithLogitsLoss()
     else:
         criterion = torch.nn.CrossEntropyLoss()
     # optimizer = torch.optim.SGD(net.parameters(), lr=learning_rate, weight_decay=0.001)
     optimizer = torch.optim.Adam(net.parameters(), lr=learning_rate, weight_decay=0.001)
-    global_params = [val.detach().clone() for val in net.parameters()]
+    global_params = [val.detach().clone().to(device) for val in net.parameters()]
     net.train()
 
     for _ in range(epochs):
@@ -86,6 +89,9 @@ def train(net, trainloader, device, epochs, learning_rate, proximal_mu, maliciou
 
 
 def _train_one_epoch(net, global_params, trainloader, device, criterion, optimizer: torch.optim.Adam, proximal_mu: float, malicious, p_rate, dataset, target_label) -> nn.Module:
+    # Ensure the network is on the correct device
+    net = net.to(device)
+    
     if malicious == 1:
         if 'cifar' in dataset:
             t_img = Image.open("./triggers/trigger_white.png").convert('RGB')
@@ -93,7 +99,7 @@ def _train_one_epoch(net, global_params, trainloader, device, criterion, optimiz
             t_img = Image.open("./triggers/trigger_white.png").convert('L')
         t_img = t_img.resize((5, 5))
         transform = transforms.ToTensor()
-        trigger_img = transform(t_img)
+        trigger_img = transform(t_img).to(device)
     
     for images, labels in trainloader: 
         images, labels = images.to(device), labels.to(device)
@@ -130,6 +136,9 @@ def test(net, testloader, device, malicious, dataset, target_label):
     # pdb.set_trace()
     # Validate the network on the entire test set, and report loss and accuracy.
     # print(f"******&&&&&&{malicious}")
+    # Ensure the network is on the correct device
+    net = net.to(device)
+    
     if malicious == 1:
         if 'cifar' in dataset:
             t_img = Image.open("./triggers/trigger_white.png").convert('RGB')
@@ -137,7 +146,7 @@ def test(net, testloader, device, malicious, dataset, target_label):
             t_img = Image.open("./triggers/trigger_white.png").convert('L')
         t_img = t_img.resize((5, 5))
         transform = transforms.ToTensor()
-        trigger_img = transform(t_img)
+        trigger_img = transform(t_img).to(device)
 
     if dataset == 'celeba': # multi-label classification
         criterion = torch.nn.BCEWithLogitsLoss()

@@ -43,7 +43,7 @@ class PresetClient(fl.client.NumPyClient):
     def set_parameters(self, parameters):
         params_dict = zip(self.model.state_dict().keys(), parameters)
         # state_dict = OrderedDict({k: torch.Tensor(v) for k,v in params_dict})
-        state_dict = OrderedDict({ k: torch.Tensor(v) if v.shape != torch.Size([]) else torch.Tensor([0]) for k, v in params_dict})
+        state_dict = OrderedDict({ k: torch.Tensor(v).to(self.device) if v.shape != torch.Size([]) else torch.Tensor([0]).to(self.device) for k, v in params_dict})
         self.model.load_state_dict(state_dict, strict=True)
 
 
@@ -84,9 +84,9 @@ class PresetClient(fl.client.NumPyClient):
 def generate_nnclient_fn(config: DictConfig, goodtrainloaders, goodvalloaders, bdtrainloaders, bdvalloaders, num_classes, num_clients, dataset, target_label, p_rate, device):
 
     if dataset == 'mnist':
-        model = CNNet(num_classes, config.dataset)
+        model = CNNet(num_classes, config.dataset).to(device)
     elif dataset == 'lfw':  
-        model = CNN_LFW(num_classes)
+        model = CNN_LFW(num_classes).to(device)
     else:
         model = models.resnet18().to(device)
         n_features = model.fc.in_features
